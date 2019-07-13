@@ -19,4 +19,9 @@ public class StringUtils {
     public static boolean isNotBlank(String value){
         return !isBlank(value);
     }
+
+    public static String trim(String value,String start,String end){
+        return value.substring(value.indexOf(start), value.lastIndexOf(end) + 1);
+    }
+
 }

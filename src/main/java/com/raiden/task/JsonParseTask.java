@@ -2,6 +2,8 @@ package com.raiden.task;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.raiden.util.JsonUtils;
+import com.raiden.util.StringUtils;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,13 +18,23 @@ import java.util.concurrent.ForkJoinTask;
  */
 @Setter
 @Getter
-public class JsonParseTask{
+public class JsonParseTask extends AbstractTask{
 
     private String json;
-    private JTextArea jTextArea;
+    private JTextPane jTextPane;
 
-    public JsonParseTask(String json,JTextArea jTextArea) {
+    public JsonParseTask(String json,JTextPane jTextPane) {
         this.json = json;
-        this.jTextArea = jTextArea;
+        this.jTextPane = jTextPane;
+    }
+
+    @Override
+    public void execute() {
+        if (StringUtils.isBlank(json)){
+            return;
+        }
+        Object jsonObject = preconditioning(json);
+        String result = JsonUtils.responseFormat(JSON.toJSONString(jsonObject, SerializerFeature.SortField));
+        jTextPane.setText(result);
     }
 }

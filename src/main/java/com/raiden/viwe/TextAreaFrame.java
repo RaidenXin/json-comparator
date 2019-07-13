@@ -7,7 +7,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Arrays;
 
 public class TextAreaFrame extends JFrame{
 	/**
@@ -16,10 +15,11 @@ public class TextAreaFrame extends JFrame{
 	private static final long serialVersionUID = 2568996309431093667L;
 
     private static final String CONTENT_TEXT = "请输入要比较的json。";
-	private JButton b1 = new JButton("sort");
-	private JButton b2 = new JButton("Obtain");
-	private JTextArea t = new JTextArea();
-    private JTextArea t2 = new JTextArea();
+	private JButton b1 = new JButton("排序");
+	private JButton b2 = new JButton("比较");
+    private JButton b3 = new JButton("比较属性名");
+	private JTextPane left = new JTextPane();
+    private JTextPane right = new JTextPane();
 	private Controller controller = new Controller();
 	private LogHandler handler = LogHandler.newInstance();
 
@@ -28,28 +28,33 @@ public class TextAreaFrame extends JFrame{
 		b1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controller.add(Arrays.asList(t,t2));
+                controller.add(left,right);
             }
         });
-//		b2.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				controller.obtainFiles(pathText.getText(), contentText.getText());
-//			}
-//		});
-        t.setText(CONTENT_TEXT);
-        t2.setText(CONTENT_TEXT);
-        t.setLineWrap(true);
-        t2.setLineWrap(true);
+		b2.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				controller.add(1, left,right);
+			}
+		});
+        b3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                controller.add(2, left,right);
+            }
+        });
+        left.setText(CONTENT_TEXT);
+        right.setText(CONTENT_TEXT);
         JPanel p = new JPanel();
-        p.add(new JScrollPane(t));
-        p.add(new JScrollPane(t2));
-        p.setLayout(new GridLayout(1, 2, 10, 30));
+        p.add(new JScrollPane(left));
+        p.add(new JScrollPane(right));
+        p.setLayout(new GridLayout(1, 3, 10, 30));
         add(p);
         JPanel p2 = new JPanel();
         p2.add(b1);
-//		p2.add(b2);
-        p2.setLayout(new FlowLayout(1,2,2));
+        p2.add(b2);
+        p2.add(b3);
+        p2.setLayout(new FlowLayout(1,3,2));
         add(p2, BorderLayout.SOUTH);
 		handler.start();
 	}
