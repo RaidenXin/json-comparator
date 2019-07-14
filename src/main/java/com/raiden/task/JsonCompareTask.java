@@ -51,14 +51,12 @@ public class JsonCompareTask extends AbstractTask{
                 }else {
                     String leftValue = leftJsons[i];
                     String rightValue = rightJsons[i];
-                    int leftLength = i == 0 ? 0 : leftDocument.getLength();
-                    int rightLength = i == 0 ? 0 : rightDocument.getLength();
                     if (compare(leftValue, rightValue)){
-                        leftDocument.insertString(leftLength, "\n" + leftValue, left.getStyle("normal"));
-                        rightDocument.insertString(rightLength, "\n" + rightValue, left.getStyle("normal"));
+                        leftDocument.insertString(leftDocument.getLength(), "\n" + leftValue, left.getStyle("normal"));
+                        rightDocument.insertString(rightDocument.getLength(), "\n" + rightValue, left.getStyle("normal"));
                     }else {
-                        leftDocument.insertString(leftLength, "\n" + leftValue, left.getStyle("red"));
-                        rightDocument.insertString(rightLength, "\n" + rightValue, left.getStyle("red"));
+                        leftDocument.insertString(leftDocument.getLength(), "\n" + leftValue, left.getStyle("red"));
+                        rightDocument.insertString(rightDocument.getLength(), "\n" + rightValue, left.getStyle("red"));
                     }
                 }
             }
