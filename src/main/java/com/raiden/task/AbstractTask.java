@@ -7,7 +7,7 @@ import com.raiden.util.StringUtils;
  * @创建人:Raiden
  * @Descriotion:
  * @Date:Created in 20:19 2019/7/13
- * @Modified By:
+ * @Modified By: 抽象任务类
  */
 public abstract class AbstractTask implements Task{
 

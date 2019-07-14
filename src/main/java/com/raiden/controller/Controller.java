@@ -2,6 +2,7 @@ package com.raiden.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.raiden.base.Strategy;
 import com.raiden.handler.TaskHandler;
 import com.raiden.logs.Logger;
 import com.raiden.task.JsonCompareTask;
@@ -29,7 +30,6 @@ public class Controller {
     private Condition condition;
     private TaskHandler handler;
     private Logger logger = Logger.newInstance();
-    private static final Map<String,List<File>> QUERIED_COLLECTION_OF_FILES = new HashMap<>();
 
     public Controller(){
         this.taskStack = new Stack<>();
@@ -48,23 +48,20 @@ public class Controller {
                 taskStack.push(new JsonParseTask(json, jTextPane));
             }
         }
-        lock.lock();
-        try {
-            condition.signal();
-        }finally {
-            lock.unlock();
-        }
-    }
-    public void add(int type,JTextPane... jTextPanes){
-        taskStack.push(new JsonCompareTask(type, jTextPanes));
-        lock.lock();
-        try {
-            condition.signal();
-        }finally {
-            lock.unlock();
-        }
+        signal();
     }
 
+    /**
+     * 添加任务并且唤醒主线程
+     */
+    public void add(Strategy type, JTextPane... jTextPanes){
+        taskStack.push(new JsonCompareTask(type, jTextPanes));
+        signal();
+    }
+
+    /**
+     * 主要工作线程
+     */
     public void start(){
         Runnable task = new Runnable() {
             @Override
@@ -80,6 +77,7 @@ public class Controller {
                             handler.handler(task);
                         }catch (Exception e){
                             logger.error(e);
+                            //为了防止主线程因为解析报错而中断
                             e.printStackTrace();
                         }
                     }
@@ -90,5 +88,17 @@ public class Controller {
         };
         Thread thread = new Thread(task);
         thread.start();
+    }
+
+    /**
+     * 唤醒主线程
+     */
+    private void signal(){
+        lock.lock();
+        try {
+            condition.signal();
+        }finally {
+            lock.unlock();
+        }
     }
 }
