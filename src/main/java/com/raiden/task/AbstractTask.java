@@ -29,11 +29,17 @@ public abstract class AbstractTask implements Task{
         return treeMap;
     }
 
+    /**
+     * 根据字段名排序
+     * @param map
+     * @return
+     */
     private Map<String, Object> sortField(Map<String, Object> map){
         Map<String, Object> treeMap = new TreeMap<>(new MapComparator());
         for (Map.Entry<String, Object> entry : map.entrySet()){
             Object value = entry.getValue();
-            if (value == null){
+            //除去空和空字符
+            if (value == null || (value instanceof String && StringUtils.isBlank((String) value))){
                 continue;
             }
             if (value instanceof JSONObject){
@@ -48,10 +54,6 @@ public abstract class AbstractTask implements Task{
                     list.add(map1);
                 }
                 treeMap.put(entry.getKey(), list);
-            }else if (value instanceof String){
-                if (StringUtils.isNotBlank((String) value)){
-                    treeMap.put(entry.getKey(), value);
-                }
             }else {
                 treeMap.put(entry.getKey(), value);
             }
