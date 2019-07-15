@@ -14,7 +14,7 @@ public class LogHandler {
     private static final String Log_File_Name = "Main.log";
     private static final String Error_Log_File_Name = "ErrorMain.log";
     private static final LogsStack stack = LogsStack.newInstance();
-    private static final String savePath = LogHandler.class.getProtectionDomain().getCodeSource().getLocation().getFile();
+    private static String savePath = LogHandler.class.getProtectionDomain().getCodeSource().getLocation().getFile();
     private static final LogHandler logHandler = new LogHandler();
 
     private LogHandler(){
@@ -29,6 +29,11 @@ public class LogHandler {
             @Override
             public void run() {
                 System.err.println("日志线程已经启动！");
+                if (savePath.indexOf("/") > -1){
+                    savePath = savePath.substring(0, savePath.lastIndexOf("/"));
+                }else {
+                    savePath = savePath.substring(0, savePath.lastIndexOf("\\"));
+                }
                 System.err.println(savePath + saveFolderName);
                 File file = new File(savePath + saveFolderName);
                 if (!file.exists()) {

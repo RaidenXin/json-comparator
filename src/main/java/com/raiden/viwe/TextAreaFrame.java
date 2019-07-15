@@ -35,13 +35,13 @@ public class TextAreaFrame extends JFrame{
 		b2.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				controller.add(Strategy.COMPARE, left,right);
+				controller.add(Strategy.COMPARE, left, right);
 			}
 		});
         b3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controller.add(Strategy.COMPARE_FIELD_NAME, left,right);
+                controller.add(Strategy.COMPARE_FIELD_NAME, left, right);
             }
         });
         left.setText(CONTENT_TEXT);

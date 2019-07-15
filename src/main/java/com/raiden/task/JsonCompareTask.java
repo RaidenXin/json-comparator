@@ -73,7 +73,7 @@ public class JsonCompareTask extends AbstractTask{
      */
     private String[] getJsonArry(JTextPane jTextPane,String json){
         Object jsonObject = preconditioning(json);
-        json = JsonUtils.responseFormat(JSON.toJSONString(jsonObject, SerializerFeature.SortField));
+        json = JsonUtils.responseFormat(JSON.toJSONString(jsonObject));
         String[] jsonArray = json.split("\n");
         setColor(jTextPane);
         return jsonArray;
