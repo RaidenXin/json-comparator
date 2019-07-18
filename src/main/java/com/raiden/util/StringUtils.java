@@ -20,6 +20,15 @@ public class StringUtils {
         return !isBlank(value);
     }
 
+    public static boolean isNonBlank(String... values){
+        for (String value : values){
+            if (isBlank(value)){
+                return false;
+            }
+        }
+        return true;
+    }
+
     public static String trim(String value,String start,String end){
         return value.substring(value.indexOf(start), value.lastIndexOf(end) + 1);
     }

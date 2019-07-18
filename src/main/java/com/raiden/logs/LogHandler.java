@@ -49,13 +49,13 @@ public class LogHandler {
                         errorLogs = new File(savePath + saveFolderName + Error_Log_File_Name);
                     }
                         try(FileWriter writer = new FileWriter(logs,true); FileWriter errorWriter = new FileWriter(errorLogs,true)){
-                            if (!stack.logsIsEmpty()){
+                            if (!stack.logsIsEmpty(writer, errorWriter)){
                                 String log = stack.poll();
                                 if (StringUtils.isNotBlank(log)){
                                     writer.write(log);
                                 }
                             }
-                            if (!stack.errorLogsIsEmpty()){
+                            if (!stack.errorLogsIsEmpty(writer, errorWriter)){
                                 String log = stack.errorPop();
                                 if (StringUtils.isNotBlank(log)){
                                     errorWriter.write(log);

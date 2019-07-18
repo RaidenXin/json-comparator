@@ -54,9 +54,13 @@ public class Controller {
     /**
      * 添加任务并且唤醒主线程
      */
-    public void add(Strategy type, JTextPane... jTextPanes){
-        taskStack.push(new JsonCompareTask(type, jTextPanes));
-        signal();
+    public void add(Strategy type,JTextPane left,JTextPane right){
+        String leftJson = left.getText();
+        String rightJson = right.getText();
+        if (StringUtils.isNonBlank(leftJson, rightJson) && !CONTENT_TEXT.equals(leftJson) && !CONTENT_TEXT.equals(rightJson)){
+            taskStack.push(new JsonCompareTask(type, left, right));
+            signal();
+        }
     }
 
     /**

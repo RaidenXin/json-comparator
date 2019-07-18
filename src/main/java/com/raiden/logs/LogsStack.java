@@ -1,5 +1,6 @@
 package com.raiden.logs;
 
+import java.io.FileWriter;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.locks.Condition;
@@ -65,20 +66,22 @@ public class LogsStack {
         return result;
     }
 
-    public boolean logsIsEmpty(){
-        isAwait();
+    public boolean logsIsEmpty(FileWriter writer,FileWriter errorWriter){
+        isAwait(writer, errorWriter);
         return queue.isEmpty();
     }
 
-    public boolean errorLogsIsEmpty(){
-        isAwait();
+    public boolean errorLogsIsEmpty(FileWriter writer,FileWriter errorWriter){
+        isAwait(writer, errorWriter);
         return error_queue.isEmpty();
     }
 
-    private void isAwait(){
+    private void isAwait(FileWriter writer,FileWriter errorWriter){
         lock.lock();
         try{
             if (queue.isEmpty() && error_queue.isEmpty()){
+                writer.close();
+                errorWriter.close();
                 condition.await();
             }
         }catch (Exception e){
