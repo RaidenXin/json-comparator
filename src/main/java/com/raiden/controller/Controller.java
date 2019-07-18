@@ -80,10 +80,10 @@ public class Controller {
                                 Task task = taskStack.pop();
                                 handler.handler(task);
                             }
-                        }catch (Exception e){
+                        }catch (Throwable e){
                             logger.error(e);
                             //为了防止主线程因为解析报错而中断
-                            e.printStackTrace();
+//                            e.printStackTrace();
                         }
                     }
                 }finally {

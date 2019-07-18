@@ -19,6 +19,8 @@ import java.awt.*;
  */
 public class JsonCompareTask extends AbstractTask{
 
+    private Logger logger = Logger.newInstance();
+
     private JTextPane left;
     private JTextPane right;
     private Strategy type;
@@ -61,6 +63,7 @@ public class JsonCompareTask extends AbstractTask{
                 }
             }
         }catch (Exception e){
+            logger.error("JsonCompareTask is error", e);
             e.printStackTrace();
         }
     }

@@ -34,11 +34,11 @@ public final class Logger {
         stack.errorAdd(errorStr);
     }
 
-    public void error(Exception e){
+    public void error(Throwable e){
         error(StringUtils.EMPTY, e);
     }
 
-    public void error(String errorStr, Exception e){
+    public void error(String errorStr, Throwable e){
         Date time = new Date();
         final SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         StringBuilder builder = new StringBuilder(simpleDateFormat.format(time));

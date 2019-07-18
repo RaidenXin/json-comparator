@@ -66,22 +66,20 @@ public class LogsStack {
         return result;
     }
 
-    public boolean logsIsEmpty(FileWriter writer,FileWriter errorWriter){
-        isAwait(writer, errorWriter);
+    public boolean logsIsEmpty(){
+        isAwait();
         return queue.isEmpty();
     }
 
-    public boolean errorLogsIsEmpty(FileWriter writer,FileWriter errorWriter){
-        isAwait(writer, errorWriter);
+    public boolean errorLogsIsEmpty(){
+        isAwait();
         return error_queue.isEmpty();
     }
 
-    private void isAwait(FileWriter writer,FileWriter errorWriter){
+    private void isAwait(){
         lock.lock();
         try{
             if (queue.isEmpty() && error_queue.isEmpty()){
-                writer.close();
-                errorWriter.close();
                 condition.await();
             }
         }catch (Exception e){

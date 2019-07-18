@@ -39,8 +39,10 @@ public class LogHandler {
                 if (!file.exists()) {
                     file.mkdir();
                 }
-                File logs = new File(savePath + saveFolderName + Log_File_Name);
-                File errorLogs = new File(savePath + saveFolderName + Error_Log_File_Name);
+                String logFileName = savePath + saveFolderName + Log_File_Name;
+                String errorLogFileName = savePath + saveFolderName + Error_Log_File_Name;
+                File logs = new File(logFileName);
+                File errorLogs = new File(errorLogFileName);
                 while (true){
                     if (!logs.exists()){
                         logs = new File(savePath + saveFolderName + Log_File_Name);
@@ -48,26 +50,33 @@ public class LogHandler {
                     if (!errorLogs.exists()){
                         errorLogs = new File(savePath + saveFolderName + Error_Log_File_Name);
                     }
-                        try(FileWriter writer = new FileWriter(logs,true); FileWriter errorWriter = new FileWriter(errorLogs,true)){
-                            if (!stack.logsIsEmpty(writer, errorWriter)){
-                                String log = stack.poll();
-                                if (StringUtils.isNotBlank(log)){
-                                    writer.write(log);
-                                }
-                            }
-                            if (!stack.errorLogsIsEmpty(writer, errorWriter)){
-                                String log = stack.errorPop();
-                                if (StringUtils.isNotBlank(log)){
-                                    errorWriter.write(log);
-                                }
-                            }
-                        }catch (Exception e){
-                            stack.errorAdd(e.getMessage());
+                    if (!stack.logsIsEmpty()){
+                        String log = stack.poll();
+                        if (StringUtils.isNotBlank(log)){
+                            write(logs, logFileName, log);
                         }
+                    }
+                    if (!stack.errorLogsIsEmpty()){
+                        String log = stack.errorPop();
+                        if (StringUtils.isNotBlank(log)){
+                            write(errorLogs, errorLogFileName, log);
+                        }
+                    }
                 }
             }
         };
         Thread thread = new Thread(task);
         thread.start();
+    }
+
+    private void write(File logFile,String fileName,String logs){
+        if (!logFile.exists()){
+            logFile = new File(fileName);
+        }
+        try (FileWriter writer = new FileWriter(logFile,true)){
+            writer.append(logs);
+        }catch (Exception e){
+            stack.errorAdd(e.getMessage());
+        }
     }
 }

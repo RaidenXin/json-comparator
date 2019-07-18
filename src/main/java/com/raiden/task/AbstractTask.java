@@ -18,7 +18,9 @@ public abstract class AbstractTask implements Task{
 
     protected Object preconditioning(String json){
         //干掉第一个大括号之前和最后一个大括号之后的字符
-        json = StringUtils.trim(json, "{", "}");
+        if (null != json && json.indexOf("{") > -1 && json.indexOf("}") > -1){
+            json = StringUtils.trim(json, "{", "}");
+        }
         //看看是否被转译过，去掉转译
         if (json.indexOf("\\") > -1){
             json = json.replaceAll("\\\\", "");
