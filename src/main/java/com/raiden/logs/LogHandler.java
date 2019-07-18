@@ -44,12 +44,6 @@ public class LogHandler {
                 File logs = new File(logFileName);
                 File errorLogs = new File(errorLogFileName);
                 while (true){
-                    if (!logs.exists()){
-                        logs = new File(savePath + saveFolderName + Log_File_Name);
-                    }
-                    if (!errorLogs.exists()){
-                        errorLogs = new File(savePath + saveFolderName + Error_Log_File_Name);
-                    }
                     if (!stack.logsIsEmpty()){
                         String log = stack.poll();
                         if (StringUtils.isNotBlank(log)){
