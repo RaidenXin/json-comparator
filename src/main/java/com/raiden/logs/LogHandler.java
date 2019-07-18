@@ -42,8 +42,13 @@ public class LogHandler {
                 File logs = new File(savePath + saveFolderName + Log_File_Name);
                 File errorLogs = new File(savePath + saveFolderName + Error_Log_File_Name);
                 while (true){
-                        try(FileWriter writer = new FileWriter(logs,true);
-                        FileWriter errorWriter = new FileWriter(errorLogs,true)){
+                    if (!logs.exists()){
+                        logs = new File(savePath + saveFolderName + Log_File_Name);
+                    }
+                    if (!errorLogs.exists()){
+                        errorLogs = new File(savePath + saveFolderName + Error_Log_File_Name);
+                    }
+                        try(FileWriter writer = new FileWriter(logs,true); FileWriter errorWriter = new FileWriter(errorLogs,true)){
                             if (!stack.logsIsEmpty()){
                                 String log = stack.poll();
                                 if (StringUtils.isNotBlank(log)){

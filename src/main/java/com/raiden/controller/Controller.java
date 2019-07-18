@@ -72,9 +72,10 @@ public class Controller {
                         try {
                             if (taskStack.isEmpty()){
                                 condition.await();
+                            }else {
+                                Task task = taskStack.pop();
+                                handler.handler(task);
                             }
-                            Task task = taskStack.pop();
-                            handler.handler(task);
                         }catch (Exception e){
                             logger.error(e);
                             //为了防止主线程因为解析报错而中断
