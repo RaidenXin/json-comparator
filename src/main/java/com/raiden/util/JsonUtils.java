@@ -20,8 +20,8 @@ public class JsonUtils {
 
         StringBuffer jsonForMatStr = new StringBuffer();
         int level = 0;
-        for(int index=0;index<resString.length();index++)//将字符串中的字符逐个按行输出
-        {
+        //将字符串中的字符逐个按行输出
+        for (int index = 0,n =  resString.length(); index < n; index++) {
             //获取s中的每个字符
             char c = resString.charAt(index);
 
@@ -29,6 +29,8 @@ public class JsonUtils {
             if (level > 0  && '\n' == jsonForMatStr.charAt(jsonForMatStr.length() - 1)) {
                 jsonForMatStr.append(getLevelStr(level));
             }
+            char pre = index == 0 ? c : resString.charAt(index - 1);
+            char next = index == n - 1 ? c : resString.charAt(index + 1);
             //遇到"{"和"["要增加空格和换行，遇到"}"和"]"要减少空格，以对应，遇到","要换行
             switch (c) {
                 case '{':
@@ -37,7 +39,10 @@ public class JsonUtils {
                     level++;
                     break;
                 case ',':
-                    jsonForMatStr.append(c + "\n");
+                    jsonForMatStr.append(c);
+                    if ((pre == '\"' || next == '\"') || (pre == ']' && next == '[') || (pre == '}' && next == '{')){
+                         jsonForMatStr.append("\n");
+                     }
                     break;
                 case '}':
                 case ']':
