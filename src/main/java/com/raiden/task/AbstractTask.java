@@ -58,8 +58,6 @@ public abstract class AbstractTask implements Task{
                     //其他基础类型直接放进去
                     list.add(object);
                 }
-                //list 排序方便比较
-                list.sort(new ListComparator());
                 treeMap.put(entry.getKey(), list);
             }else {
                 //其他基础类型直接放进去
