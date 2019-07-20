@@ -39,10 +39,14 @@ public final class Logger {
     }
 
     public void error(String errorStr, Throwable e){
+        stack.errorAdd(print(errorStr, e));
+    }
+
+    private String print(String errorStr, Throwable e){
         Date time = new Date();
         final SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         StringBuilder builder = new StringBuilder(simpleDateFormat.format(time));
-        builder.append("\t");
+        builder.append("\tERROR\t");
         builder.append(errorStr);
         builder.append(e.getClass().getName());
         builder.append("\t:");
@@ -51,17 +55,22 @@ public final class Logger {
         for (StackTraceElement stackTraceElement : e.getStackTrace()) {
             time = new Date();
             builder.append(simpleDateFormat.format(time));
-            builder.append("\t");
+            builder.append("\tERROR\tat\t");
             builder.append(stackTraceElement.getClassName());
-            builder.append("\t");
-            builder.append(stackTraceElement.getFileName());
-            builder.append("\t");
+            builder.append(".");
             builder.append(stackTraceElement.getMethodName());
-            builder.append("\t");
+            builder.append("(");
             builder.append("Line in line");
             builder.append(stackTraceElement.getLineNumber());
-            builder.append("\r\n");
+            builder.append(")\r\n");
         }
-        stack.errorAdd(builder.toString());
+        for (Throwable throwable : e.getSuppressed()){
+            builder.append(print("Caused by: ", throwable));
+        }
+        Throwable cause = e.getCause();
+        if (null != cause){
+            builder.append(print("Caused by: ", cause));
+        }
+        return builder.toString();
     }
 }

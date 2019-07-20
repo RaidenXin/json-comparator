@@ -22,6 +22,7 @@ public class JsonCompareTask extends AbstractTask{
 
     private Logger logger = Logger.newInstance();
     private static final int MAX = 1000000;
+    private static final String LINE_BREAK = "\n";
 
     private JTextPane left;
     private JTextPane right;
@@ -53,10 +54,10 @@ public class JsonCompareTask extends AbstractTask{
                 Document rightDocument = right.getDocument();//获得文本对象
                 //将右边多余的全部输出
                 if (leftIndex >= leftJsons.length && rightIndex < rightJsons.length){
-                    rightDocument.insertString(rightDocument.getLength(), "\n" + rightJsons[rightIndex++], left.getStyle("red"));
+                    rightDocument.insertString(rightDocument.getLength(), LINE_BREAK + rightJsons[rightIndex++], left.getStyle("red"));
                 }else if (rightIndex >= rightJsons.length && leftIndex < leftJsons.length){
                     //将左边多余的全部输出
-                    leftDocument.insertString(leftDocument.getLength(), "\n" + leftJsons[leftIndex++], left.getStyle("red"));
+                    leftDocument.insertString(leftDocument.getLength(), LINE_BREAK + leftJsons[leftIndex++], left.getStyle("red"));
                 }else if (rightIndex < rightJsons.length && leftIndex < leftJsons.length){
                     String leftValue = leftJsons[leftIndex];
                     StringBuilder leftBuilder = new StringBuilder();
@@ -81,31 +82,31 @@ public class JsonCompareTask extends AbstractTask{
                         //如果遇到了相同的 以原色输出到界面 并且将左边leftBuilder 累加的换回符也一并输出 全部下标+1
                         if (compare(leftValue, rightValue)) {
                             //将左边累加的换行一并输出
-                            leftBuilder.append("\n" + leftValue);
+                            leftBuilder.append(LINE_BREAK + leftValue);
                             leftDocument.insertString(leftDocument.getLength(), leftBuilder.toString(), left.getStyle("normal"));
                             leftIndex++;
                             //比较是不是第一次比就遇到了正确的 如果是就输出 右边下标+1
                             if (rightIndex == i){
-                                rightDocument.insertString(rightDocument.getLength(), "\n" + rightValue, left.getStyle("normal"));
+                                rightDocument.insertString(rightDocument.getLength(), LINE_BREAK + rightValue, left.getStyle("normal"));
                                 rightIndex++;
                             }else {
                                 //如果不是 就将右边 rightIndex 位置的字符 到 i - 1 位置的字符全部以红色输出 并且让 rightIndex = i+1
                                 for (int j = rightIndex; j < i;j++){
-                                    rightDocument.insertString(rightDocument.getLength(), "\n" + rightJsons[j], left.getStyle("red"));
+                                    rightDocument.insertString(rightDocument.getLength(), LINE_BREAK + rightJsons[j], left.getStyle("red"));
                                 }
-                                rightDocument.insertString(rightDocument.getLength(), "\n" + rightValue, left.getStyle("normal"));
+                                rightDocument.insertString(rightDocument.getLength(), LINE_BREAK + rightValue, left.getStyle("normal"));
                                 rightIndex = i + 1;
                             }
                             break;
                         }else {
                             //如果不相同 就一直比 直到遇到相同的 或者遇到 右半边大括号
                             //不相同 左边新增一个换行符
-                            leftBuilder.append("\n");
+                            leftBuilder.append(LINE_BREAK);
                             //判断是不是终结符
                             if ("}".equals(rightValue)){
                                 // 就终止对比 将左边以红色输出 给右边输出加一个空行符
-                                leftDocument.insertString(leftDocument.getLength(), "\n" + leftJsons[leftIndex++], left.getStyle("red"));
-                                rightDocument.insertString(rightDocument.getLength(), "\n", left.getStyle("red"));
+                                leftDocument.insertString(leftDocument.getLength(), LINE_BREAK + leftJsons[leftIndex++], left.getStyle("red"));
+                                rightDocument.insertString(rightDocument.getLength(), LINE_BREAK, left.getStyle("red"));
                                 //清空左边累加的换行符
                                 leftBuilder.delete(0, leftBuilder.length());
                                 break;
@@ -128,10 +129,13 @@ public class JsonCompareTask extends AbstractTask{
      * @return
      */
     private String[] getJsonArry(JTextPane jTextPane,String json){
-        Object jsonObject = preconditioning(json);
+        setColor(jTextPane);
+        Object jsonObject = preconditioning(jTextPane, json);
+        if (null == jsonObject){
+            return new String[0];
+        }
         json = JsonUtils.responseFormat(JSON.toJSONString(jsonObject));
         String[] jsonArray = json.split("\n");
-        setColor(jTextPane);
         return jsonArray;
     }
 

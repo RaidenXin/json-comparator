@@ -4,8 +4,10 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.raiden.logs.Logger;
 import com.raiden.util.StringUtils;
 
+import javax.swing.*;
 import java.util.*;
 
 /**
@@ -16,17 +18,26 @@ import java.util.*;
  */
 public abstract class AbstractTask implements Task{
 
-    protected Object preconditioning(String json){
+    private Logger logger = Logger.newInstance();
+
+    protected Object preconditioning(JTextPane jTextPane, String json){
         //干掉第一个大括号之前和最后一个大括号之后的字符
-        if (null != json && json.indexOf("{") > -1 && json.indexOf("}") > -1){
-            json = StringUtils.trim(json, "{", "}");
+        try {
+            if (null != json && json.indexOf("{") > -1 && json.indexOf("}") > -1){
+                json = StringUtils.trim(json, "{", "}");
+            }
+            //看看是否被转译过，去掉转译
+            if (json.indexOf("\\") > -1){
+                json = json.replaceAll("\\\\", "");
+            }
+            JSONObject object = JSON.parseObject(json);
+            json = JSON.toJSONString(object, SerializerFeature.SortField);
+        }catch (Throwable e){
+            logger.error(e);
+            e.printStackTrace();
+            jTextPane.setText("请检查你的JSON串是否正确！");
+            return null;
         }
-        //看看是否被转译过，去掉转译
-        if (json.indexOf("\\") > -1){
-            json = json.replaceAll("\\\\", "");
-        }
-        JSONObject object = JSON.parseObject(json);
-        json = JSON.toJSONString(object, SerializerFeature.SortField);
         Map<String, Object> treeMap = sortField(JSON.parseObject(json, Map.class));
         return treeMap;
     }
@@ -72,26 +83,6 @@ public abstract class AbstractTask implements Task{
         @Override
         public int compare(String str1, String str2) {
             return str1.compareTo(str2);
-        }
-    }
-
-    class ListComparator implements Comparator<Object> {
-        @Override
-        public int compare(Object o1, Object o2) {
-            //因为这里面不是基础类型就是Map 或者他们的 map的toString方法被复写过 会把所有的key和value组合拼接成字符串
-            //比如 map.put("key":"value"); toString 会变成 {"key":"value"}
-            String str1 = o1.toString();
-            String str2 = o2.toString();
-            //获得其字符串长度
-            Integer length1= str1.length();
-            Integer length2 = str2.length();
-            //先比较其长度
-            int i = length1.compareTo(length2);
-            //如果长度相同 在比较实际字符串
-            if (i == 0){
-                return str1.compareTo(str2);
-            }
-            return i;
         }
     }
 }

@@ -33,7 +33,10 @@ public class JsonParseTask extends AbstractTask{
         if (StringUtils.isBlank(json)){
             return;
         }
-        Object jsonObject = preconditioning(json);
+        Object jsonObject = preconditioning(jTextPane, json);
+        if (null == jsonObject){
+            return;
+        }
         String result = JsonUtils.responseFormat(JSON.toJSONString(jsonObject, SerializerFeature.SortField));
         jTextPane.setText(result);
     }
