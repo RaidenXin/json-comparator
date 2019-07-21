@@ -26,18 +26,21 @@ public class TextAreaFrame extends JFrame{
 
 	public TextAreaFrame() {
 		controller.start();
+		//设置排序按钮
 		b1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 controller.add(left,right);
             }
         });
+		//设置比较按钮
 		b2.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				controller.add(Strategy.COMPARE, left, right);
 			}
 		});
+		//设置比较字段按钮
         b3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
