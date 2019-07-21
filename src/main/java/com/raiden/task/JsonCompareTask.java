@@ -43,6 +43,8 @@ public class JsonCompareTask extends AbstractTask{
         if (StringUtils.isBlank(leftJson) || StringUtils.isBlank(rightJson)){
             return;
         }
+        Stack<String> leftStartStringStack = new Stack<>();
+        Stack<String> rightStartStrinStack = new Stack<>();
         Stack<String> stack = new Stack<>();
         try {
             String[] leftJsons = getJsonArry(left, leftJson);
@@ -60,16 +62,25 @@ public class JsonCompareTask extends AbstractTask{
                     leftDocument.insertString(leftDocument.getLength(), LINE_BREAK + leftJsons[leftIndex++], left.getStyle("red"));
                 }else if (rightIndex < rightJsons.length && leftIndex < leftJsons.length){
                     String leftValue = leftJsons[leftIndex];
+                    if (isStartString(leftValue)){
+                        leftStartStringStack.push(leftValue);
+                    }else if (isEndtring(leftValue)){
+                        leftStartStringStack.pop();
+                    }
+                    if (isEndtring(rightJsons[rightIndex])){
+                        rightStartStrinStack.pop();
+                    }
                     StringBuilder leftBuilder = new StringBuilder();
                     //循环右边的 元素与左边已经取出的元素进行对比 直到对比到相等的或者这个json块的终止符（最外层的右半边大括号）
                     for (int i = rightIndex; i < rightJsons.length; i++){
                         String rightValue = rightJsons[i];
-                        //如果遇到是个左半边大括号 就放入栈中
-                        if ("{".equals(rightValue) && i != rightIndex){
+                        if (isStartString(rightValue) && rightStartStrinStack.size() < leftStartStringStack.size()){
+                            rightStartStrinStack.push(rightValue);
+                        }else if (isStartString(rightValue) && rightStartStrinStack.size() == leftStartStringStack.size()){
                             stack.push(rightValue);
                         }
                         //遇到终结符 且栈不为空就弹栈
-                        if ("}".equals(rightValue) && !stack.empty()){
+                        if (isEndtring(rightValue) && !stack.empty()){
                             stack.pop();
                             //这里也还在其他代码块中 所以也不用比较
                             continue;
@@ -103,7 +114,7 @@ public class JsonCompareTask extends AbstractTask{
                             //不相同 左边新增一个换行符
                             leftBuilder.append(LINE_BREAK);
                             //判断是不是终结符
-                            if ("}".equals(rightValue)){
+                            if (isEndtring(rightValue)){
                                 // 就终止对比 将左边以红色输出 给右边输出加一个空行符
                                 leftDocument.insertString(leftDocument.getLength(), LINE_BREAK + leftJsons[leftIndex++], left.getStyle("red"));
                                 rightDocument.insertString(rightDocument.getLength(), LINE_BREAK, left.getStyle("red"));
@@ -137,6 +148,24 @@ public class JsonCompareTask extends AbstractTask{
         json = JsonUtils.responseFormat(JSON.toJSONString(jsonObject));
         String[] jsonArray = json.split("\n");
         return jsonArray;
+    }
+
+    /**
+     * 是否开始字符
+     * @param str
+     * @return
+     */
+    private boolean isStartString(String str){
+        return str.contains("{") || str.contains("[");
+    }
+
+    /**
+     * 是否结束字符
+     * @param str
+     * @return
+     */
+    private boolean isEndtring(String str){
+        return str.contains("}") || str.contains("]");
     }
 
     /**
