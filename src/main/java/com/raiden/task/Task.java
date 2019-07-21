@@ -8,5 +8,5 @@ package com.raiden.task;
  */
 public interface Task {
 
-    public void execute();
+    public void execute() throws Exception;
 }

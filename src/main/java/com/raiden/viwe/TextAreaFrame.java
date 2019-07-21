@@ -15,7 +15,9 @@ public class TextAreaFrame extends JFrame{
 	 */
 	private static final long serialVersionUID = 2568996309431093667L;
 
-    private static final String CONTENT_TEXT = "请输入要比较的json。";
+    public static final String CONTENT_TEXT = "请输入要比较的json。";
+
+
 	private JButton b1 = new JButton("排序");
 	private JButton b2 = new JButton("比较");
     private JButton b3 = new JButton("比较属性名");
@@ -47,11 +49,11 @@ public class TextAreaFrame extends JFrame{
                 controller.add(Strategy.COMPARE_FIELD_NAME, left, right);
             }
         });
-        JScrollBar jScrollBar = new JScrollBar();
         left.setText(CONTENT_TEXT);
         right.setText(CONTENT_TEXT);
         JPanel p = new JPanel();
         //------------------设置滚动条
+        JScrollBar jScrollBar = new JScrollBar();
         JScrollPane leftPane = new JScrollPane(left);
         leftPane.getVerticalScrollBar().setModel(jScrollBar.getModel());
         JScrollPane rightPane = new JScrollPane(right);

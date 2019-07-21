@@ -8,7 +8,11 @@ import com.raiden.logs.Logger;
 import com.raiden.util.StringUtils;
 
 import javax.swing.*;
+import javax.swing.text.Style;
+import javax.swing.text.StyleConstants;
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 /**
  * @创建人:Raiden
@@ -84,5 +88,19 @@ public abstract class AbstractTask implements Task{
         public int compare(String str1, String str2) {
             return str1.compareTo(str2);
         }
+    }
+
+    /**
+     * 设置颜色模板
+     * @param textPane
+     */
+    protected void setColor(JTextPane textPane){
+        Style def = textPane.getStyledDocument().addStyle(null, null);
+        StyleConstants.setFontFamily(def, "verdana");
+        StyleConstants.setFontSize(def, 12);
+        Style normal = textPane.addStyle("normal", def);
+        Style s = textPane.addStyle("red", normal);
+        StyleConstants.setForeground(s, Color.RED);
+        textPane.setParagraphAttributes(normal, true);
     }
 }

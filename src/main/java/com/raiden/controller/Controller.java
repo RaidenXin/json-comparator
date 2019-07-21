@@ -42,12 +42,7 @@ public class Controller {
      * 添加任务并且唤醒主线程
      */
     public void add(JTextPane... jTextPanes){
-        for (JTextPane jTextPane : jTextPanes){
-            String json = jTextPane.getText();
-            if (StringUtils.isNotBlank(json) && !CONTENT_TEXT.equals(json)){
-                taskStack.push(new JsonParseTask(json, jTextPane));
-            }
-        }
+        taskStack.push(new JsonParseTask(jTextPanes));
         signal();
     }
 

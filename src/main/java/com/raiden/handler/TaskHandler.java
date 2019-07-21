@@ -10,7 +10,7 @@ import com.raiden.task.Task;
  */
 public class TaskHandler {
 
-    public void handler(Task task){
+    public void handler(Task task) throws Exception{
         task.execute();
     }
 }
