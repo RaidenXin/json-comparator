@@ -44,11 +44,18 @@ public class TextAreaFrame extends JFrame{
                 controller.add(Strategy.COMPARE_FIELD_NAME, left, right);
             }
         });
+        JScrollBar jScrollBar = new JScrollBar();
         left.setText(CONTENT_TEXT);
         right.setText(CONTENT_TEXT);
         JPanel p = new JPanel();
-        p.add(new JScrollPane(left));
-        p.add(new JScrollPane(right));
+        //------------------设置滚动条
+        JScrollPane leftPane = new JScrollPane(left);
+        leftPane.getVerticalScrollBar().setModel(jScrollBar.getModel());
+        JScrollPane rightPane = new JScrollPane(right);
+        rightPane.getVerticalScrollBar().setModel(jScrollBar.getModel());
+        //-----------------
+        p.add(leftPane);
+        p.add(rightPane);
         p.setLayout(new GridLayout(1, 3, 10, 30));
         add(p);
         JPanel p2 = new JPanel();
