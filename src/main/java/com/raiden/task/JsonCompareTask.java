@@ -51,18 +51,10 @@ public class JsonCompareTask extends AbstractTask{
             String[] rightJsons = getJsonArry(right, rightJson);
             int leftIndex, rightIndex, sum;
             leftIndex = rightIndex = sum = 0;
+            Document leftDocument = left.getDocument();//获得文本对象
+            Document rightDocument = right.getDocument();//获得文本对象
             while (sum < MAX){
-                Document leftDocument = left.getDocument();//获得文本对象
-                Document rightDocument = right.getDocument();//获得文本对象
-                //将右边多余的全部输出
-                if (leftIndex >= leftJsons.length && rightIndex < rightJsons.length){
-                    rightDocument.insertString(rightDocument.getLength(), LINE_BREAK + rightJsons[rightIndex++], left.getStyle("red"));
-                    leftDocument.insertString(leftDocument.getLength(), LINE_BREAK, left.getStyle("red"));
-                }else if (rightIndex >= rightJsons.length && leftIndex < leftJsons.length){
-                    //将左边多余的全部输出
-                    leftDocument.insertString(leftDocument.getLength(), LINE_BREAK + leftJsons[leftIndex++], left.getStyle("red"));
-                    rightDocument.insertString(rightDocument.getLength(), LINE_BREAK, left.getStyle("red"));
-                }else if (rightIndex < rightJsons.length && leftIndex < leftJsons.length){
+                if (rightIndex < rightJsons.length && leftIndex < leftJsons.length){
                     String leftValue = leftJsons[leftIndex];
                     if (isStartString(leftValue)){
                         leftStartStringStack.push(leftValue);
