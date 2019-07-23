@@ -21,7 +21,7 @@ import java.util.Stack;
 public class JsonCompareTask extends AbstractTask{
 
     private Logger logger = Logger.newInstance();
-    private static final int MAX = 1000000;
+    private static final int MAX = 100000;
     private static final String LINE_BREAK = "\n";
 
     private JTextPane left;
@@ -147,7 +147,7 @@ public class JsonCompareTask extends AbstractTask{
      * @return
      */
     private boolean isStartString(String str){
-        return str.contains("{") || str.contains("[");
+        return str.endsWith("{") || str.endsWith("[") || str.endsWith(":{") || str.endsWith(":[");
     }
 
     /**
@@ -156,7 +156,7 @@ public class JsonCompareTask extends AbstractTask{
      * @return
      */
     private boolean isEndtring(String str){
-        return str.contains("}") || str.contains("]");
+        return str.endsWith("}") || str.endsWith("},") || str.endsWith("]")|| str.endsWith("],");
     }
 
 

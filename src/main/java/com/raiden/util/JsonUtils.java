@@ -35,20 +35,25 @@ public class JsonUtils {
             switch (c) {
                 case '{':
                 case '[':
-                    jsonForMatStr.append(c + "\n");
-                    level++;
+                    jsonForMatStr.append(c);
+                    if (pre == '{' || pre == ':' || pre == '['|| pre == ','){
+                        jsonForMatStr.append("\n");
+                        level++;
+                    }
                     break;
                 case ',':
                     jsonForMatStr.append(c);
-                    if ((pre == '\"' || next == '\"') || (pre == ']' && next == '[') || (pre == '}' && next == '{')){
+                    if ((pre == '\"' || next == '\"') || (pre == ']' || next == '[') || (pre == '}' || next == '{')){
                          jsonForMatStr.append("\n");
                      }
                     break;
                 case '}':
                 case ']':
-                    jsonForMatStr.append("\n");
-                    level--;
-                    jsonForMatStr.append(getLevelStr(level));
+                    if (next == ',' || next == '}'|| next == ']'){
+                        jsonForMatStr.append("\n");
+                        level--;
+                        jsonForMatStr.append(getLevelStr(level));
+                    }
                     jsonForMatStr.append(c);
                     break;
                 default:
