@@ -1,15 +1,13 @@
 package com.raiden.task;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.raiden.base.Strategy;
 import com.raiden.logs.Logger;
 import com.raiden.util.JsonUtils;
-import com.raiden.util.StringUtils;
+import com.raiden.util.StringUtil;
 
 import javax.swing.*;
 import javax.swing.text.*;
-import java.awt.*;
 import java.util.Stack;
 
 /**
@@ -40,7 +38,7 @@ public class JsonCompareTask extends AbstractTask{
         String rightJson = right.getText();
         left.setText("");
         right.setText("");
-        if (StringUtils.isBlank(leftJson) || StringUtils.isBlank(rightJson)){
+        if (StringUtil.isBlank(leftJson) || StringUtil.isBlank(rightJson)){
             return;
         }
         Stack<String> leftStartStringStack = new Stack<>();

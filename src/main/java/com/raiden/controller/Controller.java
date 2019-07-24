@@ -1,18 +1,14 @@
 package com.raiden.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.raiden.base.Strategy;
 import com.raiden.handler.TaskHandler;
 import com.raiden.logs.Logger;
 import com.raiden.task.JsonCompareTask;
 import com.raiden.task.JsonParseTask;
 import com.raiden.task.Task;
-import com.raiden.util.JsonUtils;
-import com.raiden.util.StringUtils;
+import com.raiden.util.StringUtil;
 
 import javax.swing.*;
-import java.io.File;
 import java.util.*;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
@@ -52,7 +48,7 @@ public class Controller {
     public void add(Strategy type,JTextPane left,JTextPane right){
         String leftJson = left.getText();
         String rightJson = right.getText();
-        if (StringUtils.isNonBlank(leftJson, rightJson) && !CONTENT_TEXT.equals(leftJson) && !CONTENT_TEXT.equals(rightJson)){
+        if (StringUtil.isNonBlank(leftJson, rightJson) && !CONTENT_TEXT.equals(leftJson) && !CONTENT_TEXT.equals(rightJson)){
             taskStack.push(new JsonCompareTask(type, left, right));
             signal();
         }
