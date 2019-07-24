@@ -5,7 +5,8 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.raiden.logs.Logger;
-import com.raiden.util.StringUtils;
+import com.raiden.util.StringUtil;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
 import javax.swing.text.Style;
@@ -28,12 +29,10 @@ public abstract class AbstractTask implements Task{
         //干掉第一个大括号之前和最后一个大括号之后的字符
         try {
             if (null != json && json.indexOf("{") > -1 && json.indexOf("}") > -1){
-                json = StringUtils.trim(json, "{", "}");
+                json = StringUtil.trim(json, "{", "}");
             }
             //看看是否被转译过，去掉转译
-            if (json.indexOf("\\") > -1){
-                json = json.replaceAll("\\\\", "");
-            }
+            json = StringUtils.replace(json, "\\\"", "\"");
             JSONObject object = JSON.parseObject(json);
             json = JSON.toJSONString(object, SerializerFeature.SortField);
         }catch (Throwable e){
@@ -53,7 +52,7 @@ public abstract class AbstractTask implements Task{
         for (Map.Entry<String, Object> entry : map.entrySet()){
             Object value = entry.getValue();
             //去掉空和空字符串
-            if (value == null || (value instanceof String && StringUtils.isBlank((String) value))){
+            if (value == null || (value instanceof String && StringUtil.isBlank((String) value))){
                 continue;
             }
             //判断是不是 JSONObject 如果是转化成TreeMap

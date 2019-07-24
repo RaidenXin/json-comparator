@@ -1,6 +1,6 @@
 package com.raiden.logs;
 
-import com.raiden.util.StringUtils;
+import com.raiden.util.StringUtil;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -46,13 +46,13 @@ public class LogHandler {
                 while (true){
                     if (!stack.logsIsEmpty()){
                         String log = stack.poll();
-                        if (StringUtils.isNotBlank(log)){
+                        if (StringUtil.isNotBlank(log)){
                             write(logs, logFileName, log);
                         }
                     }
                     if (!stack.errorLogsIsEmpty()){
                         String log = stack.errorPop();
-                        if (StringUtils.isNotBlank(log)){
+                        if (StringUtil.isNotBlank(log)){
                             write(errorLogs, errorLogFileName, log);
                         }
                     }

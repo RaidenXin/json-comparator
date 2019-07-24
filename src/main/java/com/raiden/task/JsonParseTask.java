@@ -3,15 +3,13 @@ package com.raiden.task;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.raiden.util.JsonUtils;
-import com.raiden.util.StringUtils;
+import com.raiden.util.StringUtil;
 import com.raiden.viwe.TextAreaFrame;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.swing.*;
 import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
-import java.util.concurrent.ForkJoinTask;
 
 /**
  * @创建人:Raiden
@@ -46,7 +44,7 @@ public class JsonParseTask extends AbstractTask{
 
     private String sort(JTextPane jTextPane){
         String text = jTextPane.getText();
-        if (StringUtils.isBlank(text) || TextAreaFrame.CONTENT_TEXT.equals(text)){
+        if (StringUtil.isBlank(text) || TextAreaFrame.CONTENT_TEXT.equals(text)){
             return text;
         }
         Object object = preconditioning(jTextPane, jTextPane.getText());

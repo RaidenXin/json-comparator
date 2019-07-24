@@ -1,6 +1,6 @@
 package com.raiden.logs;
 
-import com.raiden.util.StringUtils;
+import com.raiden.util.StringUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -35,7 +35,7 @@ public final class Logger {
     }
 
     public void error(Throwable e){
-        error(StringUtils.EMPTY, e);
+        error(StringUtil.EMPTY, e);
     }
 
     public void error(String errorStr, Throwable e){
