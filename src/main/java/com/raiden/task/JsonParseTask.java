@@ -44,7 +44,7 @@ public class JsonParseTask extends AbstractTask{
 
     private String sort(JTextPane jTextPane){
         String text = jTextPane.getText();
-        if (StringUtil.isBlank(text) || TextAreaFrame.CONTENT_TEXT.equals(text)){
+        if (StringUtil.isBlank(text) || text.contains(TextAreaFrame.CONTENT_TEXT)){
             return text;
         }
         Object object = preconditioning(jTextPane, jTextPane.getText());

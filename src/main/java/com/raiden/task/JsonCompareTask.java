@@ -5,6 +5,8 @@ import com.raiden.base.Strategy;
 import com.raiden.logs.Logger;
 import com.raiden.util.JsonUtils;
 import com.raiden.util.StringUtil;
+import com.raiden.viwe.TextAreaFrame;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
 import javax.swing.text.*;
@@ -38,7 +40,7 @@ public class JsonCompareTask extends AbstractTask{
         String rightJson = right.getText();
         left.setText("");
         right.setText("");
-        if (StringUtil.isBlank(leftJson) || StringUtil.isBlank(rightJson)){
+        if (StringUtils.isAnyBlank(leftJson, rightJson) || leftJson.contains(TextAreaFrame.CONTENT_TEXT) || rightJson.contains(TextAreaFrame.CONTENT_TEXT)){
             return;
         }
         Stack<String> leftStartStringStack = new Stack<>();
