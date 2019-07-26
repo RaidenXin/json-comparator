@@ -26,12 +26,14 @@ public abstract class AbstractTask implements Task{
     private Logger logger = Logger.newInstance();
 
     protected Object preconditioning(JTextPane jTextPane, String json){
-        //干掉第一个大括号之前和最后一个大括号之后的字符
         try {
-            if (null != json && json.indexOf("{") > -1 && json.indexOf("}") > -1){
-                json = StringUtil.trim(json, "{", "}");
+            int index = 0;
+            //干掉第一个大括号 或者 中括号 之前和最后一个大括号之后的字符
+            if (StringUtils.isNotBlank(json)&& (index = json.indexOf("{")) > -1 && json.indexOf("}") > -1){
+                boolean isArrays = json.indexOf("[") < index;
+                json = isArrays? StringUtil.trim(json, "[", "]") : StringUtil.trim(json, "{", "}");
             }
-            //看看是否被转译过，去掉转译
+            //去掉转译
             json = StringUtils.replace(json, "\\\"", "\"");
             JSONObject object = JSON.parseObject(json);
             json = JSON.toJSONString(object, SerializerFeature.SortField);
