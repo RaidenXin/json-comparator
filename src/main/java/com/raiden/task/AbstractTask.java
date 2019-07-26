@@ -30,7 +30,8 @@ public abstract class AbstractTask implements Task{
             int index = 0;
             //干掉第一个大括号 或者 中括号 之前和最后一个大括号之后的字符
             if (StringUtils.isNotBlank(json)&& (index = json.indexOf("{")) > -1 && json.indexOf("}") > -1){
-                boolean isArrays = json.indexOf("[") < index;
+                int i = json.indexOf("[");
+                boolean isArrays = i > -1 && i < index;
                 json = isArrays? StringUtil.trim(json, "[", "]") : StringUtil.trim(json, "{", "}");
             }
             //去掉转译
