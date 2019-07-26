@@ -10,6 +10,7 @@ import com.raiden.util.StringUtil;
 
 import javax.swing.*;
 import java.util.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -21,14 +22,14 @@ public class Controller {
 
     private static final String CONTENT_TEXT = "请输入要比较的json。";
 
-    private Stack<Task> taskStack;
+    private Queue<Task> taskStack;
     private Lock lock;
     private Condition condition;
     private TaskHandler handler;
     private Logger logger = Logger.newInstance();
 
     public Controller(){
-        this.taskStack = new Stack<>();
+        this.taskStack = new ConcurrentLinkedQueue<>();
         this.lock = new ReentrantLock();
         this.condition = lock.newCondition();
         this.handler = new TaskHandler();
@@ -38,7 +39,7 @@ public class Controller {
      * 添加任务并且唤醒主线程
      */
     public void add(JTextPane... jTextPanes){
-        taskStack.push(new JsonParseTask(jTextPanes));
+        taskStack.add(new JsonParseTask(jTextPanes));
         signal();
     }
 
@@ -49,7 +50,7 @@ public class Controller {
         String leftJson = left.getText();
         String rightJson = right.getText();
         if (StringUtil.isNonBlank(leftJson, rightJson) && !CONTENT_TEXT.equals(leftJson) && !CONTENT_TEXT.equals(rightJson)){
-            taskStack.push(new JsonCompareTask(type, left, right));
+            taskStack.add(new JsonCompareTask(type, left, right));
             signal();
         }
     }
@@ -68,7 +69,7 @@ public class Controller {
                             if (taskStack.isEmpty()){
                                 condition.await();
                             }else {
-                                Task task = taskStack.pop();
+                                Task task = taskStack.poll();
                                 handler.handler(task);
                             }
                         }catch (Throwable e){
