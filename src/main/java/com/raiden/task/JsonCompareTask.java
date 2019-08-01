@@ -3,6 +3,7 @@ package com.raiden.task;
 import com.alibaba.fastjson.JSON;
 import com.raiden.base.Strategy;
 import com.raiden.logs.Logger;
+import com.raiden.util.EditorDistanceUtils;
 import com.raiden.util.JsonUtils;
 import com.raiden.util.StringUtil;
 import com.raiden.viwe.TextAreaFrame;
@@ -45,7 +46,6 @@ public class JsonCompareTask extends AbstractTask{
         }
         Stack<String> leftStartStringStack = new Stack<>();
         Stack<String> rightStartStrinStack = new Stack<>();
-        Stack<String> stack = new Stack<>();
         try {
             String[] leftJsons = getJsonArry(left, leftJson);
             String[] rightJsons = getJsonArry(right, rightJson);
@@ -91,6 +91,7 @@ public class JsonCompareTask extends AbstractTask{
                         }
                         //如果能到这 说明回到了原来代码块中 可以继续比较
                         //如果遇到了相同的 以原色输出到界面 并且将左边leftBuilder 累加的换回符也一并输出 全部下标+1
+                        double similarity = 0D;
                         if (compare(leftValue, rightValue)) {
                             //将左边累加的换行一并输出
                             leftBuilder.append(LINE_BREAK + leftValue);
@@ -98,18 +99,40 @@ public class JsonCompareTask extends AbstractTask{
                             leftIndex++;
                             //比较是不是第一次比就遇到了正确的 如果是就输出 右边下标+1
                             if (rightIndex == i){
-                                rightDocument.insertString(rightDocument.getLength(), LINE_BREAK + rightValue, left.getStyle("normal"));
+                                rightDocument.insertString(rightDocument.getLength(), LINE_BREAK + rightValue, right.getStyle("normal"));
                                 rightIndex++;
                             }else {
                                 //如果不是 就将右边 rightIndex 位置的字符 到 i - 1 位置的字符全部以红色输出 并且让 rightIndex = i+1
                                 for (int j = rightIndex; j < i;j++){
-                                    rightDocument.insertString(rightDocument.getLength(), LINE_BREAK + rightJsons[j], left.getStyle("red"));
+                                    rightDocument.insertString(rightDocument.getLength(), LINE_BREAK + rightJsons[j], right.getStyle("red"));
                                 }
-                                rightDocument.insertString(rightDocument.getLength(), LINE_BREAK + rightValue, left.getStyle("normal"));
+                                rightDocument.insertString(rightDocument.getLength(), LINE_BREAK + rightValue, right.getStyle("normal"));
                                 rightIndex = i + 1;
                             }
                             break;
-                        }else {
+                        }else if ((similarity = EditorDistanceUtils.levenshtein(leftValue, rightValue)) > 0.8 && similarity < 1.0){
+                            //将左边累加的换行一并输出
+                            leftBuilder.append(LINE_BREAK);
+                            leftDocument.insertString(leftDocument.getLength(), leftBuilder.toString(), left.getStyle("normal"));
+                            String[] leftArray = leftValue.split("");
+                            String[] rightArray = rightValue.split("");
+                            //比较是不是第一次比就遇到了正确的 如果是就输出 右边下标+1
+                            if (rightIndex == i){
+                                rightDocument.insertString(rightDocument.getLength(), LINE_BREAK, right.getStyle("normal"));
+                                setContent(leftArray, rightArray, leftDocument, rightDocument);
+                                rightIndex++;
+                            }else {
+                                //如果不是 就将右边 rightIndex 位置的字符 到 i - 1 位置的字符全部以红色输出 并且让 rightIndex = i+1
+                                for (int j = rightIndex; j < i;j++){
+                                    rightDocument.insertString(rightDocument.getLength(), LINE_BREAK + rightJsons[j], right.getStyle("red"));
+                                }
+                                rightDocument.insertString(rightDocument.getLength(), LINE_BREAK, right.getStyle("normal"));
+                                setContent(leftArray, rightArray, leftDocument, rightDocument);
+                                rightIndex = i + 1;
+                            }
+                            leftIndex++;
+                            break;
+                        } else {
                             //如果不相同 就一直比 直到遇到相同的 或者遇到 右半边大括号
                             //不相同 左边新增一个换行符
                             leftBuilder.append(LINE_BREAK);
@@ -167,21 +190,36 @@ public class JsonCompareTask extends AbstractTask{
      * @return
      */
     private boolean compare(String leftValue,String rightValue){
-        if (type == Strategy.COMPARE){
-            if (leftValue.equals(rightValue)){
-                return true;
-            }
-            int i = leftValue.length() - rightValue.length();
-            // 如果他们长度仅仅相差一位。 肯能是因为最后多了逗号引起的不相等， 可以去掉最后一位在比较
-            if (i == -1){
-                rightValue = rightValue.substring(0, rightValue.length() - 1);
-            }else if (i == 1){
-                leftValue = leftValue.substring(0, leftValue.length() - 1);
-            }
-            return leftValue.equals(rightValue);
+        if (leftValue.equals(rightValue)){
+            return true;
         }
-        String[] leftSplit = leftValue.split(":");
-        String[] rightSplit = rightValue.split(":");
-        return leftSplit[0].equals(rightSplit[0]);
+        int i = leftValue.length() - rightValue.length();
+        // 如果他们长度仅仅相差一位。 肯能是因为最后多了逗号引起的不相等， 可以去掉最后一位在比较
+        if (i == -1){
+            rightValue = rightValue.substring(0, rightValue.length() - 1);
+        }else if (i == 1){
+            leftValue = leftValue.substring(0, leftValue.length() - 1);
+        }
+        return leftValue.equals(rightValue);
+    }
+
+    private void setContent(String[] leftArray,String[] rightArray,Document leftDocument, Document rightDocument) throws Exception{
+        for (int j = 0,n = Math.max(leftArray.length, rightArray.length); j < n;j++){
+            if (j > leftArray.length){
+                rightDocument.insertString(rightDocument.getLength(), rightArray[j], right.getStyle("red"));
+            }else if (j > rightArray.length){
+                leftDocument.insertString(leftDocument.getLength(), leftArray[j], left.getStyle("red"));
+            }else {
+                String leftStr = leftArray[j];
+                String rightStr = rightArray[j];
+                if (leftStr.equals(rightStr)){
+                    leftDocument.insertString(leftDocument.getLength(), leftArray[j], left.getStyle("normal"));
+                    rightDocument.insertString(rightDocument.getLength(), rightArray[j], right.getStyle("normal"));
+                }else {
+                    leftDocument.insertString(leftDocument.getLength(), leftArray[j], left.getStyle("red"));
+                    rightDocument.insertString(rightDocument.getLength(), rightArray[j], right.getStyle("red"));
+                }
+            }
+        }
     }
 }
