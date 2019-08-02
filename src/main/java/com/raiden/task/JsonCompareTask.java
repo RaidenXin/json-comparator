@@ -5,7 +5,6 @@ import com.raiden.base.Strategy;
 import com.raiden.logs.Logger;
 import com.raiden.util.EditorDistanceUtils;
 import com.raiden.util.JsonUtils;
-import com.raiden.util.StringUtil;
 import com.raiden.viwe.TextAreaFrame;
 import org.apache.commons.lang3.StringUtils;
 
