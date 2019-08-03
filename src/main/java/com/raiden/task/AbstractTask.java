@@ -24,6 +24,13 @@ import java.util.List;
 public abstract class AbstractTask implements Task{
 
     private Logger logger = Logger.newInstance();
+    protected JTextPane left;
+    protected JTextPane right;
+
+    public AbstractTask(JTextPane... jTextPanes){
+        this.left = jTextPanes[0];
+        this.right = jTextPanes[1];
+    }
 
     protected Object preconditioning(JTextPane jTextPane, String json){
         try {

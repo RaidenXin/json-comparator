@@ -5,6 +5,7 @@ import com.raiden.handler.TaskHandler;
 import com.raiden.logs.Logger;
 import com.raiden.task.JsonCompareTask;
 import com.raiden.task.JsonParseTask;
+import com.raiden.task.NetToJavaTask;
 import com.raiden.task.Task;
 import com.raiden.util.StringUtil;
 
@@ -38,21 +39,19 @@ public class Controller {
     /**
      * 添加任务并且唤醒主线程
      */
-    public void add(JTextPane... jTextPanes){
-        taskStack.add(new JsonParseTask(jTextPanes));
-        signal();
-    }
-
-    /**
-     * 添加任务并且唤醒主线程
-     */
-    public void add(Strategy type,JTextPane left,JTextPane right){
-        String leftJson = left.getText();
-        String rightJson = right.getText();
-        if (StringUtil.isNonBlank(leftJson, rightJson) && !CONTENT_TEXT.equals(leftJson) && !CONTENT_TEXT.equals(rightJson)){
-            taskStack.add(new JsonCompareTask(type, left, right));
-            signal();
+    public void add(Strategy type,JTextPane... jTextPanes){
+        if (type == Strategy.COMPARE){
+            String leftJson = jTextPanes[0].getText();
+            String rightJson = jTextPanes[1].getText();
+            if (StringUtil.isNonBlank(leftJson, rightJson) && !CONTENT_TEXT.equals(leftJson) && !CONTENT_TEXT.equals(rightJson)){
+                taskStack.add(new JsonCompareTask(jTextPanes[0], jTextPanes[1]));
+            }
+        }else if (type == Strategy.SORT){
+            taskStack.add(new JsonParseTask(jTextPanes));
+        }else if (type == Strategy.CONVERT){
+            taskStack.add(new NetToJavaTask(jTextPanes));
         }
+        signal();
     }
 
     /**

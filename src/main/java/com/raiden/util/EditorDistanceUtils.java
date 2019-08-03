@@ -6,6 +6,11 @@ import org.apache.commons.lang3.StringUtils;
 public class EditorDistanceUtils {
 
     /**
+     * 工具类最好不要有构造方法
+     */
+    private EditorDistanceUtils(){}
+
+    /**
      * 比较两个字符串的相似度，并返回相似率。
      * @param leftValue
      * @param rightValue

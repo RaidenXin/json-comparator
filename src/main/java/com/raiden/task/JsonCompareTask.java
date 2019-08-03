@@ -26,14 +26,8 @@ public class JsonCompareTask extends AbstractTask{
     private static final String NORMAL = "normal";
     private static final String RED = "red";
 
-    private JTextPane left;
-    private JTextPane right;
-    private Strategy type;
-
-    public JsonCompareTask(Strategy type,JTextPane... jTextPanes){
-        this.type = type;
-        this.left = jTextPanes[0];
-        this.right = jTextPanes[1];
+    public JsonCompareTask(JTextPane... jTextPanes){
+        super(jTextPanes);
     }
 
     @Override

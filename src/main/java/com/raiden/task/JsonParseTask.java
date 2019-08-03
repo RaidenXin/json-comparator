@@ -22,12 +22,8 @@ import javax.swing.text.BadLocationException;
 @Getter
 public class JsonParseTask extends AbstractTask{
 
-    private JTextPane left;
-    private JTextPane right;
-
     public JsonParseTask(JTextPane... jTextPanes) {
-        this.left = jTextPanes[0];
-        this.right = jTextPanes[1];
+        super(jTextPanes);
     }
 
     @Override

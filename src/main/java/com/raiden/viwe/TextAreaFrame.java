@@ -20,6 +20,7 @@ public class TextAreaFrame extends JFrame{
 
 	private JButton b1 = new JButton("排序");
 	private JButton b2 = new JButton("比较");
+    private JButton b3 = new JButton("转换");
 	private JTextPane left = new JTextPane();
     private JTextPane right = new JTextPane();
 	private Controller controller = new Controller();
@@ -31,7 +32,7 @@ public class TextAreaFrame extends JFrame{
 		b1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controller.add(left,right);
+                controller.add(Strategy.SORT,left,right);
             }
         });
 		//设置比较按钮
@@ -41,6 +42,13 @@ public class TextAreaFrame extends JFrame{
 				controller.add(Strategy.COMPARE, left, right);
 			}
 		});
+        //设置比较按钮
+        b3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                controller.add(Strategy.CONVERT, left, right);
+            }
+        });
         left.setText(CONTENT_TEXT);
         right.setText(CONTENT_TEXT);
         JPanel p = new JPanel();
@@ -58,6 +66,7 @@ public class TextAreaFrame extends JFrame{
         JPanel p2 = new JPanel();
         p2.add(b1);
         p2.add(b2);
+        p2.add(b3);
         p2.setLayout(new FlowLayout(1,3,2));
         add(p2, BorderLayout.SOUTH);
 		handler.start();

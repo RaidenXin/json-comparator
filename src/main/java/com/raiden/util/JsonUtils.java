@@ -9,6 +9,10 @@ package com.raiden.util;
 public class JsonUtils {
 
     /**
+     * 工具类最好不要有构造方法
+     */
+    private JsonUtils(){}
+    /**
      * @param resString
      * @return String
      * @throws

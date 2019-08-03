@@ -9,7 +9,8 @@ package com.raiden.base;
 public enum Strategy{
 
     SORT(0),
-    COMPARE(1);
+    COMPARE(1),
+    CONVERT(2);
 
 
     private int type;
