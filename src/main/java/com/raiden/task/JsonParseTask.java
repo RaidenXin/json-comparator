@@ -7,6 +7,7 @@ import com.raiden.util.StringUtil;
 import com.raiden.viwe.TextAreaFrame;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
 import javax.swing.text.BadLocationException;
@@ -43,7 +44,7 @@ public class JsonParseTask extends AbstractTask{
     }
 
     private String sort(JTextPane jTextPane){
-        String text = jTextPane.getText();
+        String text = StringUtils.replace(jTextPane.getText(), "\n", StringUtils.EMPTY);
         if (StringUtil.isBlank(text) || text.contains(TextAreaFrame.CONTENT_TEXT)){
             return text;
         }

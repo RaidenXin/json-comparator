@@ -1,15 +1,19 @@
 package com.raiden.util;
 
 
+import org.apache.commons.lang3.StringUtils;
+
 public class EditorDistanceUtils {
 
     /**
      * 比较两个字符串的相似度，并返回相似率。
-     * @param str1
-     * @param str2
+     * @param leftValue
+     * @param rightValue
      * @return
      */
-    public static double levenshtein(String str1, String str2) {
+    public static double levenshtein(String leftValue, String rightValue) {
+        String str1 = leftValue.replaceAll( "\"|:|\\}|\\{|\\[|\\]|,|\t| ", StringUtils.EMPTY);
+        String str2 = rightValue.replaceAll( "\"|:|\\}|\\{|\\[|\\]|,|\t| ", StringUtils.EMPTY);
         char[] char1 = str1.toCharArray();
         char[] char2 = str2.toCharArray();
         //计算两个字符串的长度。  
