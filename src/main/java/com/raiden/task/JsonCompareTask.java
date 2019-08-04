@@ -34,11 +34,11 @@ public class JsonCompareTask extends AbstractTask{
     public void execute() throws Exception{
         String leftJson = left.getText();
         String rightJson = right.getText();
-        left.setText("");
-        right.setText("");
         if (StringUtils.isAnyBlank(leftJson, rightJson) || leftJson.contains(TextAreaFrame.CONTENT_TEXT) || rightJson.contains(TextAreaFrame.CONTENT_TEXT)){
             return;
         }
+        left.setText("");
+        right.setText("");
         Stack<String> leftStartStringStack = new Stack<>();
         Stack<String> rightStartStrinStack = new Stack<>();
         try {
@@ -109,12 +109,10 @@ public class JsonCompareTask extends AbstractTask{
                             //将左边累加的换行一并输出
                             leftBuilder.append(LINE_BREAK);
                             leftDocument.insertString(leftDocument.getLength(), leftBuilder.toString(), left.getStyle(NORMAL));
-                            String[] leftArray = leftValue.split("");
-                            String[] rightArray = rightValue.split("");
                             //比较是不是第一次比就遇到了正确的 如果是就输出 右边下标+1
                             if (rightIndex == i){
                                 rightDocument.insertString(rightDocument.getLength(), LINE_BREAK, right.getStyle(NORMAL));
-                                contrastOneByOne(leftArray, rightArray, leftDocument, rightDocument);
+                                contrastOneByOne(leftValue, rightValue, leftDocument, rightDocument);
                                 rightIndex++;
                             }else {
                                 //如果不是 就将右边 rightIndex 位置的字符 到 i - 1 位置的字符全部以红色输出 并且让 rightIndex = i+1
@@ -122,7 +120,7 @@ public class JsonCompareTask extends AbstractTask{
                                     rightDocument.insertString(rightDocument.getLength(), LINE_BREAK + rightJsons[j], right.getStyle(RED));
                                 }
                                 rightDocument.insertString(rightDocument.getLength(), LINE_BREAK, right.getStyle(NORMAL));
-                                contrastOneByOne(leftArray, rightArray, leftDocument, rightDocument);
+                                contrastOneByOne(leftValue, rightValue, leftDocument, rightDocument);
                                 rightIndex = i + 1;
                             }
                             leftIndex++;
@@ -199,14 +197,16 @@ public class JsonCompareTask extends AbstractTask{
     }
 
     /**
-     *
-     * @param leftArray
-     * @param rightArray
+     * 逐个比较
+     * @param leftValue
+     * @param rightValue
      * @param leftDocument
      * @param rightDocument
      * @throws Exception
      */
-    private void contrastOneByOne(String[] leftArray,String[] rightArray,Document leftDocument, Document rightDocument) throws Exception{
+    private void contrastOneByOne(String leftValue,String rightValue,Document leftDocument, Document rightDocument) throws Exception{
+        String[] leftArray = leftValue.split("");
+        String[] rightArray = rightValue.split("");
         for (int j = 0,n = Math.max(leftArray.length, rightArray.length); j < n;j++){
             if (j >= leftArray.length){
                 rightDocument.insertString(rightDocument.getLength(), rightArray[j], right.getStyle(RED));
