@@ -82,6 +82,7 @@ public class NetToJavaTask extends AbstractTask {
 
     private String replaceClassType(Properties properties, String text){
         text = StringUtils.replace(text, ";", StringUtils.EMPTY).trim() + ";";
+        boolean isBool = text.indexOf("bool?") > -1 || text.indexOf("bool") > -1;
         String[] testArray = StringUtils.split(text, " ");
         String result = text;
         if (testArray.length > 2){
@@ -91,6 +92,7 @@ public class NetToJavaTask extends AbstractTask {
                 if (StringUtils.isNotBlank(key) && (value = properties.getProperty(key)) != null){
                     result = StringUtils.replace(result, key, value);
                 }else if (i == testArray.length - 1){
+                    key = isBool && (key.startsWith("is") || key.startsWith("Is")) ? key.substring(2, key.length()) : key;
                     result = StringUtils.replace(result, key, StringUtil.firstLetterLowercase(key));
                 }
             }
