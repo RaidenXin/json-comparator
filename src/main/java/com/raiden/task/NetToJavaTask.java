@@ -2,12 +2,10 @@ package com.raiden.task;
 
 import com.raiden.base.Info;
 import com.raiden.util.ConfigUtils;
-import com.raiden.util.StringUtil;
 import com.raiden.viwe.TextAreaFrame;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
-import java.util.Map;
 import java.util.Properties;
 
 /**
