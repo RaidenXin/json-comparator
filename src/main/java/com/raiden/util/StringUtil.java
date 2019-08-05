@@ -46,7 +46,6 @@ public class StringUtil {
         if (c > 64 && c < 91){
             c += 32;
             chars[0] = c;
-
         }
         builder.append(chars);
         return builder.toString();

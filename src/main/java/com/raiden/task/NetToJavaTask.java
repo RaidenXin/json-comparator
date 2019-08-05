@@ -21,6 +21,7 @@ public class NetToJavaTask extends AbstractTask {
     private static final String BLANK_DOUBLE = "    ";
     private static final String SEARCH_STRINGS = "searchStrings";
     private static final String REPLACEMENTDS = "replacementds";
+    private static final String JSON_ANNOTATION = "@JSONField(name = \"%s\")\n" + BLANK_DOUBLE;
 
     public NetToJavaTask(JTextPane... jTextPanes){
         super(jTextPanes);
@@ -51,7 +52,7 @@ public class NetToJavaTask extends AbstractTask {
         if (StringUtils.isBlank(text)){
             return;
         }
-        StringBuilder builder = new StringBuilder("import lombok.Setter;\nimport lombok.Getter;\n\n\n@Getter\n@Setter\n");
+        StringBuilder builder = new StringBuilder("import com.alibaba.fastjson.annotation.JSONField;\nimport lombok.Setter;\nimport lombok.Getter;\n\n\n@Getter\n@Setter\n");
         builder.append(start.trim());
         builder.append("{");
         String[] textArray = text.split(LINE_BREAK);
@@ -92,8 +93,9 @@ public class NetToJavaTask extends AbstractTask {
                 if (StringUtils.isNotBlank(key) && (value = properties.getProperty(key)) != null){
                     result = StringUtils.replace(result, key, value);
                 }else if (i == testArray.length - 1){
-                    key = isBool && (key.startsWith("is") || key.startsWith("Is")) ? key.substring(2, key.length()) : key;
-                    result = StringUtils.replace(result, key, StringUtil.firstLetterLowercase(key));
+                    String annotation = String.format(JSON_ANNOTATION, key.substring(0, key.length() - 1));
+                    String temp = isBool && (key.startsWith("is") || key.startsWith("Is")) ? key.substring(2, key.length()) : key;
+                    result = annotation  + StringUtils.replace(result, key, StringUtil.firstLetterLowercase(temp));
                 }
             }
         }
