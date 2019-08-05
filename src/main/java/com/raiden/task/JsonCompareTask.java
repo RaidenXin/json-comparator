@@ -34,7 +34,8 @@ public class JsonCompareTask extends AbstractTask{
     public void execute() throws Exception{
         String leftJson = left.getText();
         String rightJson = right.getText();
-        if (StringUtils.isAnyBlank(leftJson, rightJson) || leftJson.contains(TextAreaFrame.CONTENT_TEXT) || rightJson.contains(TextAreaFrame.CONTENT_TEXT)){
+        if (StringUtils.isAnyBlank(leftJson, rightJson) || leftJson.contains(TextAreaFrame.CONTENT_TEXT) || rightJson.contains(TextAreaFrame.CONTENT_TEXT) ||
+                leftJson.contains("请检查你的JSON串是否正确！") || rightJson.contains("请检查你的JSON串是否正确！")){
             return;
         }
         left.setText("");
