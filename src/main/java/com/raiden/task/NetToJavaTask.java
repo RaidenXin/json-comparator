@@ -30,7 +30,7 @@ public class NetToJavaTask extends AbstractTask {
     }
 
     @Override
-    public void execute() throws Exception {
+    public void execute() {
         String content = left.getText();
         if (StringUtils.isBlank(content) || content.contains(TextAreaFrame.CONTENT_TEXT)){
             return;
