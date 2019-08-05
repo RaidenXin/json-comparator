@@ -13,7 +13,18 @@ public class PathUtils {
      */
     private PathUtils(){}
 
-    private static final String rootPath = PathUtils.class.getProtectionDomain().getCodeSource().getLocation().getFile();
+    private static String rootPath;
+
+    static {
+        String path = PathUtils.class.getProtectionDomain().getCodeSource().getLocation().getFile();
+        if (path.indexOf("/") > -1 && !path.endsWith("/")){
+            rootPath = path.substring(0, path.lastIndexOf("/") + 1);
+        }else if (path.indexOf("\\") > -1 && !path.endsWith("\\")){
+            rootPath = path.substring(0, path.lastIndexOf("\\") + 1);
+        }else {
+            rootPath = path;
+        }
+    }
 
     private static final String config = "config\\";
 

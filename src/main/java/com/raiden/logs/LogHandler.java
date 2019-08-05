@@ -1,5 +1,6 @@
 package com.raiden.logs;
 
+import com.raiden.util.PathUtils;
 import com.raiden.util.StringUtil;
 
 import java.io.File;
@@ -10,12 +11,23 @@ import java.io.FileWriter;
  */
 public class LogHandler {
 
-    private static final String saveFolderName = "\\logs\\";
+    private static final String saveFolderName = "logs\\";
     private static final String Log_File_Name = "Main.log";
     private static final String Error_Log_File_Name = "ErrorMain.log";
     private static final LogsStack stack = LogsStack.newInstance();
-    private static String savePath = LogHandler.class.getProtectionDomain().getCodeSource().getLocation().getFile();
+    private static String savePath;
     private static final LogHandler logHandler = new LogHandler();
+
+    static {
+        String path = LogHandler.class.getProtectionDomain().getCodeSource().getLocation().getFile();
+        if (path.indexOf("/") > -1 && !path.endsWith("/")){
+            savePath = path.substring(0, path.lastIndexOf("/") + 1);
+        }else if (path.indexOf("\\") > -1 && !path.endsWith("\\")){
+            savePath = path.substring(0, path.lastIndexOf("\\") + 1);
+        }else {
+            savePath = path;
+        }
+    }
 
     private LogHandler(){
     }
@@ -29,11 +41,6 @@ public class LogHandler {
             @Override
             public void run() {
                 System.err.println("日志线程已经启动！");
-                if (savePath.indexOf("/") > -1){
-                    savePath = savePath.substring(0, savePath.lastIndexOf("/"));
-                }else {
-                    savePath = savePath.substring(0, savePath.lastIndexOf("\\"));
-                }
                 System.err.println(savePath + saveFolderName);
                 File file = new File(savePath + saveFolderName);
                 if (!file.exists()) {
