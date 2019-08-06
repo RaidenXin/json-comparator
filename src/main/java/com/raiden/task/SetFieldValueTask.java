@@ -45,13 +45,18 @@ public class SetFieldValueTask extends AbstractTask{
                     continue;
                 }
                 int index = rowText.indexOf("//");
-                rowText = index > -1 ? rowText.substring(0, index) : rowText;
+                String note = StringUtils.EMPTY;
+                if (index > -1 ){
+                    note = rowText.substring(index);
+                    rowText =  rowText.substring(0, index);
+                }
                 rowText = StringUtils.replace(StringUtil.firstLetterCapitalized(rowText), " = ", "(");
                 builder.append(LINE_BREAK);
                 builder.append(variableName);
                 builder.append(SET);
                 builder.append(rowText);
                 builder.append(");");
+                builder.append(note);
             }
             right.setText(builder.toString());
         }
