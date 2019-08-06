@@ -37,9 +37,15 @@ public class SetFieldValueTask extends AbstractTask{
             builder.append(";");
             for (String row : textArray){
                 String rowText = StringUtils.replace(row.trim(), ",", StringUtils.EMPTY);
-                if (StringUtils.isBlank(rowText) || rowText.startsWith("//")){
+                if (StringUtils.isBlank(rowText)){
+                    continue;
+                }else if (rowText.startsWith("//")){
+                    builder.append(LINE_BREAK);
+                    builder.append(rowText);
                     continue;
                 }
+                int index = rowText.indexOf("//");
+                rowText = index > -1 ? rowText.substring(0, index) : rowText;
                 rowText = StringUtils.replace(StringUtil.firstLetterCapitalized(rowText), " = ", "(");
                 builder.append(LINE_BREAK);
                 builder.append(variableName);
