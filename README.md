@@ -25,7 +25,7 @@ public class Assist_Areward<br>
            public DateTime ModifyDate { get; set; }<br>  
            public DateTime CreateDate { get; set; }<br>  
        }<br>  
-转换后为：
+转换后为：<br> 
 import com.alibaba.fastjson.annotation.JSONField;<br>  
 import lombok.Setter;<br>  
 import lombok.Getter;<br>  
