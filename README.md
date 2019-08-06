@@ -12,56 +12,56 @@
 
 #0.0.4加入新功能 
 ##1. 转换 是将.net格式的model转换为java格式
-示例：   \<br>  
-public class Assist_Areward\<br>  
-       {\<br>  
-           public string OrderID { get; set; }\<br>  
-           public int Point { get; set; }\<br>  
-           public string MemberID { get; set; }\<br>  
-           public string Mobile { get; set; }\<br>  
-           public string VNO { get; set; }\<br>  
-           public string ToMemberID { get; set; }\<br>  
-           public string ToMobile { get; set; }\<br>  
-           public DateTime ModifyDate { get; set; }\<br>  
-           public DateTime CreateDate { get; set; }\<br>  
-       }\<br>  
+示例：   <br>  
+public class Assist_Areward<br>  
+       {<br>  
+           public string OrderID { get; set; }<br>  
+           public int Point { get; set; }<br>  
+           public string MemberID { get; set; }<br>  
+           public string Mobile { get; set; }<br>  
+           public string VNO { get; set; }<br>  
+           public string ToMemberID { get; set; }<br>  
+           public string ToMobile { get; set; }<br>  
+           public DateTime ModifyDate { get; set; }<br>  
+           public DateTime CreateDate { get; set; }<br>  
+       }<br>  
 转换后为：
-import com.alibaba.fastjson.annotation.JSONField;\<br>  
-import lombok.Setter;\<br>  
-import lombok.Getter;\<br>  
-\<br>  
-\<br>  
-@Getter\<br>  
-@Setter\<br>  
-public class Assist_Areward{\<br>  
-    @JSONField(name = "OrderID")\<br>  
-    private String orderID;\<br>  
-    @JSONField(name = "Point")\<br>  
-    private int point;\<br>  
-    @JSONField(name = "MemberID")\<br>  
-    private String memberID;\<br>  
-    @JSONField(name = "Mobile")\<br>  
-    private String mobile;\<br>  
-    @JSONField(name = "VNO")\<br>  
-    private String vNO;\<br>  
-    @JSONField(name = "ToMemberID")\<br>  
-    private String toMemberID;\<br>  
-    @JSONField(name = "ToMobile")\<br>  
-    private String toMobile;\<br>  
-    @JSONField(name = "ModifyDate")\<br>  
-    private String modifyDate;\<br>  
-    @JSONField(name = "CreateDate")\<br>  
-    private String createDate;\<br>  
+import com.alibaba.fastjson.annotation.JSONField;<br>  
+import lombok.Setter;<br>  
+import lombok.Getter;<br>  
+<br>  
+<br>  
+@Getter<br>  
+@Setter<br>  
+public class Assist_Areward{<br>  
+    @JSONField(name = "OrderID")<br>  
+    private String orderID;<br>  
+    @JSONField(name = "Point")<br>  
+    private int point;<br>  
+    @JSONField(name = "MemberID")<br>  
+    private String memberID;<br>  
+    @JSONField(name = "Mobile")<br>  
+    private String mobile;<br>  
+    @JSONField(name = "VNO")<br>  
+    private String vNO;<br>  
+    @JSONField(name = "ToMemberID")<br>  
+    private String toMemberID;<br>  
+    @JSONField(name = "ToMobile")<br>  
+    private String toMobile;<br>  
+    @JSONField(name = "ModifyDate")<br>  
+    private String modifyDate;<br>  
+    @JSONField(name = "CreateDate")<br>  
+    private String createDate;<br>  
 }
 ##2.新增赋值功能
-加入赋值功能 主要是将.net中 对model属性赋值 转为 java方式的赋值\<br>  
+加入赋值功能 主要是将.net中 对model属性赋值 转为 java方式的赋值<br>  
 
-如：\<br>  
-var xxx = new Xxx(){\<br>  
-    a = b,\<br>  
-    d = c\<br>  
-};\<br>  
-转化为\<br>  
-Xxx xxx = new Xxx();\<br>  
-xxx.setA(b);\<br>  
-xxx.setD(c);\<br>  
+如：<br>  
+var xxx = new Xxx(){<br>  
+    a = b,<br>  
+    d = c<br>  
+};<br>  
+转化为<br>  
+Xxx xxx = new Xxx();<br>  
+xxx.setA(b);<br>  
+xxx.setD(c);<br>  
