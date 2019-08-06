@@ -39,18 +39,8 @@ public class Controller {
     /**
      * 添加任务并且唤醒主线程
      */
-    public void add(Strategy type,JTextPane... jTextPanes){
-        if (type == Strategy.COMPARE){
-            String leftJson = jTextPanes[0].getText();
-            String rightJson = jTextPanes[1].getText();
-            if (StringUtil.isNonBlank(leftJson, rightJson) && !CONTENT_TEXT.equals(leftJson) && !CONTENT_TEXT.equals(rightJson)){
-                taskStack.add(new JsonCompareTask(jTextPanes[0], jTextPanes[1]));
-            }
-        }else if (type == Strategy.SORT){
-            taskStack.add(new JsonParseTask(jTextPanes));
-        }else if (type == Strategy.CONVERT){
-            taskStack.add(new NetToJavaTask(jTextPanes));
-        }
+    public void add(Task task){
+        taskStack.add(task);
         signal();
     }
 

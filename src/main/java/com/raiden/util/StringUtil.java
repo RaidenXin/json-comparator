@@ -1,5 +1,7 @@
 package com.raiden.util;
 
+import com.raiden.base.Info;
+
 public class StringUtil {
 
     public static final String EMPTY = "";
@@ -33,4 +35,42 @@ public class StringUtil {
         return value.substring(value.indexOf(start), value.lastIndexOf(end) + 1);
     }
 
+    /**
+     * 首字母小写
+     * @param name
+     * @return
+     */
+    public static Info firstLetterLowercase(String name){
+        char[] chars = name.toCharArray();
+        StringBuilder builder = new StringBuilder();
+        char c = chars[0];
+        Info info = new Info();
+        //如果是小写才替换
+        if (c > 64 && c < 91){ ;
+            c += 32;
+            chars[0] = c;
+            info.setInsertAnnotation(true);
+        }
+        builder.append(chars);
+        return info.setValue(builder.toString());
+    }
+
+    /**
+     * 首字母大写的方法
+     * @param name
+     * @return
+     */
+    public static String firstLetterCapitalized(String name){
+        char[] chars = name.toCharArray();
+        StringBuilder builder = new StringBuilder();
+        char c = chars[0];
+        //如果是小写才替换
+        if (c > 96 && c < 123){
+            c -= 32;
+            chars[0] = c;
+
+        }
+        builder.append(chars);
+        return builder.toString();
+    }
 }

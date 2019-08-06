@@ -2,6 +2,7 @@ package com.raiden.task;
 
 import com.raiden.base.Info;
 import com.raiden.util.ConfigUtils;
+import com.raiden.util.StringUtil;
 import com.raiden.viwe.TextAreaFrame;
 import org.apache.commons.lang3.StringUtils;
 
@@ -95,31 +96,11 @@ public class NetToJavaTask extends AbstractTask {
                 }else if (i == testArray.length - 1){
                     String annotation = String.format(JSON_ANNOTATION, key.substring(0, key.length() - 1));
                     String temp = isBool && (key.startsWith("is") || key.startsWith("Is")) ? key.substring(2) : key;
-                    Info info = firstLetterLowercase(temp);
+                    Info info = StringUtil.firstLetterLowercase(temp);
                     result = info.isInsertAnnotation() ? annotation + StringUtils.replace(result, key, info.getValue()) : StringUtils.replace(result, key, info.getValue());
                 }
             }
         }
         return result;
-    }
-
-    /**
-     * 首字母小写
-     * @param name
-     * @return
-     */
-    public static Info firstLetterLowercase(String name){
-        char[] chars = name.toCharArray();
-        StringBuilder builder = new StringBuilder();
-        char c = chars[0];
-        Info info = new Info();
-        //如果是小写才替换
-        if (c > 64 && c < 91){ ;
-            c += 32;
-            chars[0] = c;
-            info.setInsertAnnotation(true);
-        }
-        builder.append(chars);
-        return info.setValue(builder.toString());
     }
 }
