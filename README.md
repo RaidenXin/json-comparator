@@ -52,7 +52,7 @@ public class Assist_Areward{<br>
     private String modifyDate;<br>  
     @JSONField(name = "CreateDate")<br>  
     private String createDate;<br>  
-}
+}<br> 
 ##2.新增赋值功能
 加入赋值功能 主要是将.net中 对model属性赋值 转为 java方式的赋值<br>  
 
