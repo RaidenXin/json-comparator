@@ -1,6 +1,5 @@
 package com.raiden.viwe;
 
-import com.raiden.base.Strategy;
 import com.raiden.controller.Controller;
 import com.raiden.logs.LogHandler;
 import com.raiden.task.JsonCompareTask;

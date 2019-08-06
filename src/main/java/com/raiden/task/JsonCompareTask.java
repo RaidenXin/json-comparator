@@ -1,7 +1,6 @@
 package com.raiden.task;
 
 import com.alibaba.fastjson.JSON;
-import com.raiden.base.Strategy;
 import com.raiden.logs.Logger;
 import com.raiden.util.EditorDistanceUtils;
 import com.raiden.util.JsonUtils;
