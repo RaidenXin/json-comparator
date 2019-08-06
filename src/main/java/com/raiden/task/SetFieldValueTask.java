@@ -37,7 +37,7 @@ public class SetFieldValueTask extends AbstractTask{
             builder.append(";");
             for (String row : textArray){
                 String rowText = StringUtils.replace(row.trim(), ",", StringUtils.EMPTY);
-                if (StringUtils.isBlank(rowText)){
+                if (StringUtils.isBlank(rowText) || rowText.startsWith("//")){
                     continue;
                 }
                 rowText = StringUtils.replace(StringUtil.firstLetterCapitalized(rowText), " = ", "(");
