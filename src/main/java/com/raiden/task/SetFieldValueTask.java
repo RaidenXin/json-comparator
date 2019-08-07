@@ -1,6 +1,5 @@
 package com.raiden.task;
 
-import com.raiden.base.Info;
 import com.raiden.util.StringUtil;
 import com.raiden.viwe.TextAreaFrame;
 import org.apache.commons.lang3.StringUtils;
@@ -12,8 +11,10 @@ import java.util.regex.Pattern;
 public class SetFieldValueTask extends AbstractTask{
 
     private static final String LINE_BREAK = "\n";
-    private static final Pattern pattern = Pattern.compile("[var|(\\w+)] (\\w+) = new (\\w+)\\(\\)");
+    private static final Pattern PATTERN = Pattern.compile("[var|(\\w+)] (\\w+) = new (\\w+)\\(\\)");
     private static final String SET = ".set";
+    private static final String GET = ".get";
+    private static final String[] BE_EQUAL_TO = {" = ", " =", "= ", "="};
 
     public SetFieldValueTask(JTextPane... jTextPanes){
         super(jTextPanes);
@@ -27,7 +28,7 @@ public class SetFieldValueTask extends AbstractTask{
         int startIndex = content.indexOf("{");
         int endIndex = content.lastIndexOf("}");
         String start = content.substring(0, startIndex).trim();
-        Matcher matcher = pattern.matcher(start);
+        Matcher matcher = PATTERN.matcher(start);
         if (matcher.find()){
             String variableName = matcher.group(1);
             String className = matcher.group(2);
@@ -50,7 +51,11 @@ public class SetFieldValueTask extends AbstractTask{
                     note = rowText.substring(index);
                     rowText =  rowText.substring(0, index);
                 }
-                rowText = StringUtils.replace(StringUtil.firstLetterCapitalized(rowText), " = ", "(");
+                int lastSpotIndex = -1;
+                if (rowText.indexOf("=") < (lastSpotIndex = rowText.lastIndexOf("."))){
+                    rowText = rowText.substring(0, lastSpotIndex) + GET + StringUtil.firstLetterCapitalized(rowText.substring(lastSpotIndex + 1)) + "()";
+                }
+                rowText = StringUtils.replaceEach(StringUtil.firstLetterCapitalized(rowText), BE_EQUAL_TO, new String[]{"(","(","(","("});
                 builder.append(LINE_BREAK);
                 builder.append(variableName);
                 builder.append(SET);
