@@ -105,7 +105,7 @@ public class JsonCompareTask extends AbstractTask{
                                 rightIndex = i + 1;
                             }
                             break;
-                        }else if ((similarity = EditorDistanceUtils.levenshtein(leftValue, rightValue)) > 0.8 && similarity < 1.0){
+                        }else if ((similarity = EditorDistanceUtils.levenshtein(leftValue, rightValue)) > 0.7 && similarity < 1.0){
                             //将左边累加的换行一并输出
                             leftBuilder.append(LINE_BREAK);
                             leftDocument.insertString(leftDocument.getLength(), leftBuilder.toString(), left.getStyle(NORMAL));

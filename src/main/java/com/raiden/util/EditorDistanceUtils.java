@@ -17,8 +17,8 @@ public class EditorDistanceUtils {
      * @return
      */
     public static double levenshtein(String leftValue, String rightValue) {
-        String str1 = leftValue.replaceAll( "\"|:|\\}|\\{|\\[|\\]|,|\t| ", StringUtils.EMPTY);
-        String str2 = rightValue.replaceAll( "\"|:|\\}|\\{|\\[|\\]|,|\t| ", StringUtils.EMPTY);
+        String str1 = leftValue.trim().replaceAll( "\"|:|\\}|\\{|\\[|\\]|,|\t| ", StringUtils.EMPTY);
+        String str2 = rightValue.trim().replaceAll( "\"|:|\\}|\\{|\\[|\\]|,|\t| ", StringUtils.EMPTY);
         char[] char1 = str1.toCharArray();
         char[] char2 = str2.toCharArray();
         //计算两个字符串的长度。  
