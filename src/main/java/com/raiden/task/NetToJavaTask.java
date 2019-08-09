@@ -23,9 +23,15 @@ public class NetToJavaTask extends AbstractTask {
     private static final String SEARCH_STRINGS = "searchStrings";
     private static final String REPLACEMENTDS = "replacementds";
     private static final String JSON_ANNOTATION = "@JSONField(name = \"%s\")\n" + BLANK_DOUBLE;
+    private volatile boolean isIgnoreAnnotation = false;
 
     public NetToJavaTask(JTextPane... jTextPanes){
         super(jTextPanes);
+    }
+
+    public NetToJavaTask setIgnoreAnnotation(boolean isIgnoreAnnotation){
+        this.isIgnoreAnnotation = isIgnoreAnnotation;
+        return this;
     }
 
     @Override
@@ -61,10 +67,12 @@ public class NetToJavaTask extends AbstractTask {
             if (StringUtils.isBlank(str = str.trim())){
                 continue;
             } else if (str.indexOf("[") > -1 && str.indexOf("]") > -1){
-                builder.append(LINE_BREAK);
-                builder.append("//");
-                builder.append(BLANK_DOUBLE);
-                builder.append(str.trim());
+                if (!isIgnoreAnnotation){
+                    builder.append(LINE_BREAK);
+                    builder.append("//");
+                    builder.append(BLANK_DOUBLE);
+                    builder.append(str.trim());
+                }
             }else if (str.indexOf("(") > -1 && str.indexOf(")") > -1){//过滤方法
                 continue;
             }else if (str.startsWith("//")){

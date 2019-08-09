@@ -12,6 +12,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 public class TextAreaFrame extends JFrame{
 	/**
@@ -22,6 +24,8 @@ public class TextAreaFrame extends JFrame{
     public static final String CONTENT_TEXT = "请输入要比较的json。";
 
 
+    private static final String[] listData = new String[]{"转换时忽略注解", "转换时保留注解"};
+    private JComboBox<String> comboBox = new JComboBox<String>(listData);
 	private JButton b1 = new JButton("排序");
 	private JButton b2 = new JButton("比较");
     private JButton b3 = new JButton("转换");
@@ -30,17 +34,18 @@ public class TextAreaFrame extends JFrame{
     private JTextPane right = new JTextPane();
 	private Controller controller = new Controller();
 	private LogHandler handler = LogHandler.newInstance();
+	private volatile boolean isIgnoreAnnotation = true;
 
 	public TextAreaFrame() {
 		controller.start();
-		//设置排序按钮
+		//设置排序按钮 事件监听
 		b1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 controller.add(new JsonParseTask(left, right));
             }
         });
-		//设置比较按钮
+		//设置比较按钮 事件监听
 		b2.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -51,14 +56,14 @@ public class TextAreaFrame extends JFrame{
                 }
 			}
 		});
-        //设置转换按钮
+        //设置转换按钮 事件监听
         b3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controller.add(new NetToJavaTask(left, right));
+                controller.add(new NetToJavaTask(left, right).setIgnoreAnnotation(isIgnoreAnnotation));
             }
         });
-        //设置赋值按钮
+        //设置赋值按钮 事件监听
         b4.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -84,8 +89,22 @@ public class TextAreaFrame extends JFrame{
         p2.add(b2);
         p2.add(b3);
         p2.add(b4);
+        // 添加条目选中状态改变的监听器
+        comboBox.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                // 只处理选中的状态
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    isIgnoreAnnotation = e.getItem().equals("转换时忽略注解");
+                }
+            }
+        });
+        comboBox.setSelectedIndex(0);
+        p2.add(comboBox);
         p2.setLayout(new FlowLayout(1,3,2));
         add(p2, BorderLayout.SOUTH);
+
+
 		handler.start();
 	}
 }
