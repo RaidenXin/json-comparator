@@ -58,7 +58,7 @@ public class NetToJavaTask extends AbstractTask {
         builder.append("{");
         String[] textArray = text.split(LINE_BREAK);
         for (String str : textArray){
-            if (StringUtils.isBlank(str)){
+            if (StringUtils.isBlank(str = str.trim())){
                 continue;
             } else if (str.indexOf("[") > -1 && str.indexOf("]") > -1){
                 builder.append(LINE_BREAK);
@@ -67,7 +67,7 @@ public class NetToJavaTask extends AbstractTask {
                 builder.append(str.trim());
             }else if (str.indexOf("(") > -1 && str.indexOf(")") > -1){//过滤方法
                 continue;
-            }else if (str.indexOf("//") > -1){
+            }else if (str.startsWith("//")){
                 builder.append(LINE_BREAK);
                 builder.append(BLANK_DOUBLE);
                 builder.append(str.trim());
@@ -93,7 +93,7 @@ public class NetToJavaTask extends AbstractTask {
                 String value;
                 if (StringUtils.isNotBlank(key) && (value = properties.getProperty(key)) != null){
                     result = StringUtils.replace(result, key, value);
-                }else if (i == testArray.length - 1){
+                }else if (i == 2){
                     String annotation = String.format(JSON_ANNOTATION, key.substring(0, key.length() - 1));
                     String temp = isBool && (key.startsWith("is") || key.startsWith("Is")) ? key.substring(2) : key;
                     Info info = StringUtil.firstLetterLowercase(temp);
