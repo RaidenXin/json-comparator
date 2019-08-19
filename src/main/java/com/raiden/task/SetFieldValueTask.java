@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 public class SetFieldValueTask extends AbstractTask{
 
     private static final String LINE_BREAK = "\n";
-    private static final Pattern PATTERN = Pattern.compile("[var|(\\w+)] (\\w+) = new (\\w+)\\(\\)");
+    private static final Pattern PATTERN = Pattern.compile("[var|(\\w+)] (\\w+) = new (\\w+)(\\(\\))?");
     private static final String SET = ".set";
     private static final String GET = ".get";
     private static final String[] BE_EQUAL_TO = {" = ", " =", "= ", "="};
