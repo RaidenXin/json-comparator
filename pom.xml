@@ -6,7 +6,7 @@
 
     <groupId>json-comparator</groupId>
     <artifactId>json-comparator</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>0.0.5</version>
     <build>
         <plugins>
             <plugin>
