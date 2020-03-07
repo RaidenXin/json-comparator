@@ -42,17 +42,15 @@ public class StringUtil {
      */
     public static Info firstLetterLowercase(String name){
         char[] chars = name.toCharArray();
-        StringBuilder builder = new StringBuilder();
         char c = chars[0];
         Info info = new Info();
         //如果是小写才替换
-        if (c > 64 && c < 91){ ;
+        if (c > 64 && c < 91){
             c += 32;
             chars[0] = c;
             info.setInsertAnnotation(true);
         }
-        builder.append(chars);
-        return info.setValue(builder.toString());
+        return info.setValue(String.valueOf(chars));
     }
 
     /**
@@ -62,7 +60,6 @@ public class StringUtil {
      */
     public static String firstLetterCapitalized(String name){
         char[] chars = name.toCharArray();
-        StringBuilder builder = new StringBuilder();
         char c = chars[0];
         //如果是小写才替换
         if (c > 96 && c < 123){
@@ -70,7 +67,6 @@ public class StringUtil {
             chars[0] = c;
 
         }
-        builder.append(chars);
-        return builder.toString();
+        return String.valueOf(chars);
     }
 }
